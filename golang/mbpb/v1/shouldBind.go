@@ -60,7 +60,7 @@ func (db *Crontab) Value() (driver.Value, error) {
 	return sonic.Marshal(db)
 }
 
-func (db *Table) Scan(value interface{}) error {
+func (db *Tables) Scan(value interface{}) error {
 
 	if value == nil {
 		return nil
@@ -76,7 +76,7 @@ func (db *Table) Scan(value interface{}) error {
 }
 
 // Value Valuer
-func (db *Table) Value() (driver.Value, error) {
+func (db *Tables) Value() (driver.Value, error) {
 
 	if db == nil {
 		return nil, nil
