@@ -30,8 +30,11 @@ func (db *DBDetail) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	// return json.Marshal(db)
-	return sonic.Marshal(db)
+	buff, err := sonic.Marshal(db)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
 }
 
 func (db *Crontab) Scan(value interface{}) error {
@@ -56,8 +59,11 @@ func (db *Crontab) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	// return json.Marshal(db)
-	return sonic.Marshal(db)
+	buff, err := sonic.Marshal(db)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
 }
 
 func (db *Tables) Scan(value interface{}) error {
@@ -82,8 +88,11 @@ func (db *Tables) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	// return json.Marshal(db)
-	return sonic.Marshal(db)
+	buff, err := sonic.Marshal(db)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
 }
 
 func (db *Extra) Scan(value interface{}) error {
@@ -108,6 +117,9 @@ func (db *Extra) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	// return json.Marshal(db)
-	return sonic.Marshal(db)
+	buff, err := sonic.Marshal(db)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
 }
