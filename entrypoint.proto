@@ -118,19 +118,19 @@ message CycleEvery {
     string Zone = 1; // 时区
     string StartTime = 2; // 执行时间
     optional string EndTime = 3; // 结束时间 无限期为null
-    EveryExpres EveryExpres = 4; // 间隔周期
+    EveryExpress EveryExpress = 4; // 间隔周期
     optional Expression Expression = 5; // 表达式
 }
 
 // 间隔周期
-message EveryExpres {
+message EveryExpress {
     EveryType CycleType = 1; // 类型
     int32 CycleValue = 2; // Value
 }
 
 // 表达式
 message Expression {
-    string Expres = 1; // 表达式
+    string Express = 1; // 表达式
 }
 
 // 间隔时间执行类型
