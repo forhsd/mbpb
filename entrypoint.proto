@@ -108,18 +108,13 @@ message DBDetail {
 
 // 执行一次
 message CycleOnce {
-    string Zone = 1; // 时区
-    string RunTime = 2; // 执行时间
-    string Expression = 3; // 表达式
+    Expression Expression = 1; // 表达式
 }
 
 // 间隔时间执行
 message CycleEvery {
-    string Zone = 1; // 时区
-    string StartTime = 2; // 执行时间
-    optional string EndTime = 3; // 结束时间 无限期为null
-    EveryExpress EveryExpress = 4; // 间隔周期
-    optional Expression Expression = 5; // 表达式
+    EveryExpress EveryExpress = 1; // 间隔周期
+    optional Expression Expression = 2; // 表达式
 }
 
 // 间隔周期
@@ -147,30 +142,30 @@ enum EveryType {
 message CycleEveryTime {
     EveryTimeType EveryType = 1; // 类型
     oneof EveryTime {
-        CycleEvery EveryDay = 3; // 每天
-        CycleEvery EveryWeek = 4; // 每周
-        CycleEveryMonth EveryMonth = 5; // 每月
+        CycleEveryDay EveryDay = 3; // 每天
+        CycleEveryWeekMonth EveryWeek = 4; // 每周
+        CycleEveryWeekMonth EveryMonth = 5; // 每月
         CycleEveryYear EveryQuarter = 6; // 每季
         CycleEveryYear EveryYear = 7; // 每年
     }
 }
 
+// 每天
+message CycleEveryDay {
+    CycleHour RunTime = 1; // 运行时间
+}
+
+
 // 每月
-message CycleEveryMonth {
-    string Zone = 1; // 时区
-    string StartTime = 2; // 执行时间
-    optional string EndTime = 3; // 结束时间 无限期为null
-    CycleHour RunTime = 4; // 运行时间
-    CycleMonth Month = 5; // 月
+message CycleEveryWeekMonth {
+    CycleHour RunTime = 1; // 运行时间
+    CycleDay Day = 2; // 天
 }
 
 // 执行周期按年
 message CycleEveryYear {
-    string Zone = 1; // 时区
-    string StartTime = 2; // 执行时间
-    optional string EndTime = 3; // 结束时间 无限期为null
-    CycleHour RunTime = 4; // 运行时间
-    map<int32,CycleMonth> Day = 5; // 天 切片 -1=最后1天
+    CycleHour RunTime = 1; // 运行时间
+    map<int32,CycleDay> Day = 2; // 天 切片 -1=最后1天
 }
 
 // 小时
@@ -180,7 +175,7 @@ message CycleHour {
 }
 
 // 每月
-message CycleMonth {
+message CycleDay {
     // 某天 -1 为最后1天
     repeated int32 Day = 1; // 天 切片
 }
@@ -195,17 +190,25 @@ enum EveryTimeType {
     EveryYear = 5; // 每年
 }
 
+message CommonConfig {
+    string Zone = 1; // 时区
+    string StartTime = 2; // 执行时间
+    optional string EndTime = 3; // 结束时间 无限期为null
+}
+
 // Crontab表达式
 message Crontab {
 
     // 调度状态
     bool Enable = 1;
+
+    CommonConfig CommonConfig = 2; // 公共配置
     
     // 执行周期
     oneof Cycle {
-        CycleOnce CycleOnce = 2; // 执行1次
-        CycleEvery CycleEvery = 3; // 周期间隔
-        CycleEveryTime CycleEveryTime = 4; // 时间循环周期执行
+        CycleOnce CycleOnce = 3; // 执行1次
+        CycleEvery CycleEvery = 4; // 周期间隔
+        CycleEveryTime CycleEveryTime = 5; // 时间循环周期执行
     }
 }
 
