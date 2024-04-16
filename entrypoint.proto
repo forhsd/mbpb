@@ -118,12 +118,34 @@ message CycleEvery {
     string Zone = 1; // 时区
     string StartTime = 2; // 执行时间
     optional string EndTime = 3; // 结束时间 无限期为null
-    string Expression = 4; // crontab表达式
+    EveryExpres EveryExpres = 4; // 间隔周期
+    optional Expression Expression = 5; // 表达式
+}
+
+// 间隔周期
+message EveryExpres {
+    EveryType CycleType = 1; // 类型
+    int32 CycleValue = 2; // Value
+}
+
+// 表达式
+message Expression {
+    string Expres = 1; // 表达式
+}
+
+// 间隔时间执行类型
+enum EveryType {
+    EvNone = 0; // 未定义
+    EvMinute = 1; // 分钟
+    EvHour = 2; // 小时
+    EvDay = 3; // 天
+    EvWeek = 4; // 周
+    EvMonth = 5; // 月
 }
 
 // 时间循环周期执行
 message CycleEveryTime {
-    EveryType EveryType = 1; // 类型
+    EveryTimeType EveryType = 1; // 类型
     oneof EveryTime {
         CycleEvery EveryDay = 3; // 每天
         CycleEvery EveryWeek = 4; // 每周
@@ -164,7 +186,7 @@ message CycleMonth {
 }
 
 // 周期类型
-enum EveryType {
+enum EveryTimeType {
     EveryNone = 0; // 未知
     EveryDay = 1; // 每天
     EveryWeek = 2; // 每周
