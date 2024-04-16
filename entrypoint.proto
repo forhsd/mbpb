@@ -1,0 +1,207 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/forhsd/mbpb/golang/mbpb/v1;mbpb";
+option java_multiple_files = false;
+option java_package = "com.holder.metabase.proto";
+option java_outer_classname = "mbpb";
+
+package mbpb;
+
+
+service MBetl {
+
+    // 启用
+    rpc Enable(EnableRequest)returns(EnableReply){}
+
+    // 禁用
+    rpc Disable(Request)returns(Reply){}
+
+    // 运行
+    rpc Run(Request)returns(Reply){}
+
+    // 取消
+    rpc Cancel(Request)returns(Reply){}
+
+    // 单向流
+    // rpc CallBack(stream CallBackRequest)returns(Error){}
+    
+}
+
+// 启用请求
+message EnableRequest {
+    DBDetail DBInfo = 1; // 数据库信息
+    string EnterpriseID = 2; // 企业ID
+    int64 CardId = 3; // Card ID
+    optional Crontab Crontab = 4; //运行周期表达式
+    string SqlScript = 5; // SQL代码
+    Tables Tables = 6; // SQL引用的实体表
+    optional Extra Extra = 7; // 附加信息
+}
+
+// 实体表切片
+message Tables {
+    repeated Table Table = 1;
+}
+
+// 字段切片
+message Columns {
+    repeated Column Column = 1; // 字段
+}
+
+// 启用回复
+message EnableReply {
+    Table OutTable = 1; // 结果表
+    Columns Columns = 2; // 字段类
+    optional google.protobuf.Timestamp NextRunTime = 3; // 下次运行时间
+    optional Error Error = 4; // 错误信息 可选
+}
+
+// 行动请求
+message Request {
+    string EnterpriseID = 1; // 企业ID
+    int64 CardId = 2; // Card ID
+}
+
+// 行动回复
+message Reply {
+    optional string Key = 1; // Key
+    optional int64 SequenceID = 2; // 序列ID
+    optional Error Error = 3; // 错误信息 可选
+}
+
+// 实体表
+message Table {
+    string Schema = 1;
+    string Table = 2;
+}
+
+// 字段类
+message Column {
+    string Name = 1;
+    string Type = 2;
+}
+
+// 运行状态
+enum RunStatus {
+    Unknown = 0; // 未知
+    NotRunning = 2; // 未运行
+    Scheme = 4; // 计划中
+    Running = 8; // 运行中
+    Success = 16; // 运行成功
+    Fail = 32; // 运行失败
+    Cancel = 64; // 已取消
+}
+
+// 数据库信息
+message DBDetail {
+    string DBType = 1; //数据库类型
+    string Host = 2; //数据主机地址
+    int32 Port = 3; //数据库端口
+    string User = 4; //数据库用户名
+    string Pwd = 5; //数据库密码
+    string DBName = 6; //数据库名称
+    map<string, string> ConnectParams = 7; // 连接参数
+}
+
+
+// 执行一次
+message CycleOnce {
+    string Zone = 1; // 时区
+    string RunTime = 2; // 执行时间
+    string Expression = 3; // 表达式
+}
+
+// 间隔时间执行
+message CycleEvery {
+    string Zone = 1; // 时区
+    string StartTime = 2; // 执行时间
+    optional string EndTime = 3; // 结束时间 无限期为null
+    string Expression = 4; // crontab表达式
+}
+
+// 时间循环周期执行
+message CycleEveryTime {
+    EveryType EveryType = 1; // 类型
+    oneof EveryTime {
+        CycleEvery EveryDay = 3; // 每天
+        CycleEvery EveryWeek = 4; // 每周
+        CycleEveryMonth EveryMonth = 5; // 每月
+        CycleEveryYear EveryQuarter = 6; // 每季
+        CycleEveryYear EveryYear = 7; // 每年
+    }
+}
+
+// 每月
+message CycleEveryMonth {
+    string Zone = 1; // 时区
+    string StartTime = 2; // 执行时间
+    optional string EndTime = 3; // 结束时间 无限期为null
+    CycleHour RunTime = 4; // 运行时间
+    CycleMonth Month = 5; // 月
+}
+
+// 执行周期按年
+message CycleEveryYear {
+    string Zone = 1; // 时区
+    string StartTime = 2; // 执行时间
+    optional string EndTime = 3; // 结束时间 无限期为null
+    CycleHour RunTime = 4; // 运行时间
+    map<int32,CycleMonth> Day = 5; // 天 切片 -1=最后1天
+}
+
+// 小时
+message CycleHour {
+    repeated int32 Hour = 1; // 小时 切片
+    repeated int32 Minute = 2; // 分钟 切片
+}
+
+// 每月
+message CycleMonth {
+    // 某天 -1 为最后1天
+    repeated int32 Day = 1; // 天 切片
+}
+
+// 周期类型
+enum EveryType {
+    EveryNone = 0; // 未知
+    EveryDay = 1; // 每天
+    EveryWeek = 2; // 每周
+    EveryMonth = 3; // 每月
+    EveryQuarter = 4; // 每季
+    EveryYear = 5; // 每年
+}
+
+// Crontab表达式
+message Crontab {
+
+    // 调度状态
+    bool Enable = 1;
+    
+    // 执行周期
+    oneof Cycle {
+        CycleOnce CycleOnce = 2; // 执行1次
+        CycleEvery CycleEvery = 3; // 周期间隔
+        CycleEveryTime CycleEveryTime = 4; // 时间循环周期执行
+    }
+}
+
+// Fully Qualified Name
+message FQN {
+    string Schema = 1;
+    string Table = 2;
+    string Column = 3;
+}
+
+// 附加信息
+message Extra {
+    repeated FQN Grouping = 1; // 分组信息
+    repeated FQN Selects = 2; // 最外层查询列信息
+}
+
+// 错误信息
+message Error {
+    int32 Code = 1; // 错误码
+    string Msg = 2; // 错误信息
+}

@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "entrypoint.proto";
+
+option go_package = "github.com/forhsd/mbpb/golang/mbnk/v1;mbnk";
+option java_multiple_files = false;
+option java_package = "com.holder.mbnk.proto";
+option java_outer_classname = "mbnk";
+
+package mbnk;
+
+service MBLink {
+    // 健康检查
+    rpc Health(stream HealthRequest) returns (stream HealthReply) {}
+    // 运行情况
+    rpc ReView(stream Overview) returns (stream Ack) {}
+}
+
+message HealthRequest {
+    string ID = 1;
+}
+
+message HealthReply {
+    bool Healthy = 1;
+}
+
+message Overview {
+    string Key = 1;
+    string Owner = 2;
+    string EnterpriseID = 3;
+    int64 CardId = 4;
+    int64 SequenceID = 5;
+    optional int64 RowsCount = 6;
+    optional int64 QueryUPtime = 7;
+    optional int64 WriteUPtime = 8;
+    optional int64 TakeUpTime = 9;
+    mbpb.RunStatus RunStatus = 10;
+    int32 Progress = 11;
+    optional google.protobuf.Timestamp StartTime = 12;
+    optional google.protobuf.Timestamp EndTime = 13;
+    optional google.protobuf.Timestamp NextRunTime = 14;
+    Detail Detail = 15;
+}
+
+message Detail {
+    optional mbpb.Table OutTable = 1;
+    optional int32 ColsCount = 2;
+    optional mbpb.Error Error = 3;
+}
+
+message Ack {
+    string Key = 1;
+    int64 SequenceID = 2;
+    optional mbpb.Error Error = 3;
+}
+
