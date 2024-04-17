@@ -3,8 +3,14 @@ package mbpb
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/cespare/xxhash/v2"
+)
+
+const (
+	TABLE_PREFIX string = `__xfjwi__table`
+	TABLE_SUFFIX string = `0201`
 )
 
 // 使用按位或设置状态
@@ -23,8 +29,32 @@ func (s RunStatus) Has(status RunStatus) bool {
 	return s&status != 0
 }
 
-func (td *EnableRequest) Hash() string {
-	key := fmt.Sprintf("%v.%v", td.EnterpriseID, td.CardId)
+func (r *EnableRequest) Hash() string {
+	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
 	hash := xxhash.Sum64([]byte(key))
 	return "etl_" + strconv.FormatUint(hash, 10)
+}
+
+// 获取输出Schema
+func (r *EnableRequest) GetOutputSchema() string {
+
+	if r.GetEnterpriseID() == "" {
+		return "result_set_defaultenterprise_db"
+	}
+
+	return fmt.Sprintf("result_set_%v_db", r.GetEnterpriseID())
+}
+
+// 获取输出表
+func (r *EnableRequest) GetOutputTable() string {
+
+	return strings.Join(
+		[]string{
+			TABLE_PREFIX,
+			// strconv.Itoa(table),
+			strconv.FormatInt(r.GetCardId(), 10),
+			TABLE_SUFFIX,
+		},
+		"__",
+	)
 }
