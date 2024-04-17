@@ -2,15 +2,16 @@ package mbpb
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/cespare/xxhash/v2"
 )
 
-const (
-	TABLE_PREFIX string = `__xfjwi__table`
-	TABLE_SUFFIX string = `0201`
+var (
+	TABLE_PREFIX string
+	TABLE_SUFFIX string
 )
 
 // 使用按位或设置状态
@@ -47,6 +48,14 @@ func (r *EnableRequest) GetOutputSchema() string {
 
 // 获取输出表
 func (r *EnableRequest) GetOutputTable() string {
+
+	if TABLE_PREFIX == "" {
+		TABLE_PREFIX = os.Getenv("MB_TABLE_PREFIX")
+	}
+
+	if TABLE_SUFFIX == "" {
+		TABLE_SUFFIX = os.Getenv("MB_TABLE_SUFFIX")
+	}
 
 	return strings.Join(
 		[]string{
