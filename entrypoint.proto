@@ -68,7 +68,8 @@ message Request {
 message Reply {
     optional string Key = 1; // Key
     optional int64 SequenceID = 2; // 序列ID
-    optional Error Error = 3; // 错误信息 可选
+    optional Columns Columns = 3; // 字段类
+    optional Error Error = 4; // 错误信息 可选
 }
 
 // 实体表
