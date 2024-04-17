@@ -4,8 +4,8 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/forhsd/mbpb/golang/mbpb/v1;mbpb";
 option java_multiple_files = false;
-option java_package = "com.holder.metabase.proto";
-option java_outer_classname = "mbpb";
+option java_package = "com.otorp.grpc.proto";
+option java_outer_classname = "MBEtlpbProto";
 
 package mbpb;
 
@@ -191,7 +191,8 @@ enum EveryTimeType {
     EveryYear = 5; // 每年
 }
 
-message CommonConfig {
+// 生命周期
+message LifeCycle {
     string Zone = 1; // 时区
     string StartTime = 2; // 执行时间
     optional string EndTime = 3; // 结束时间 无限期为null
@@ -203,7 +204,7 @@ message Crontab {
     // 调度状态
     bool Enable = 1;
 
-    CommonConfig CommonConfig = 2; // 公共配置
+    LifeCycle LifeCycle = 2; // 公共配置
     
     // 执行周期
     oneof Cycle {
