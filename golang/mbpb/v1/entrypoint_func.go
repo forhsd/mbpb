@@ -1,6 +1,7 @@
 package mbpb
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -66,4 +67,53 @@ func (r *EnableRequest) GetOutputTable() string {
 		},
 		"__",
 	)
+}
+
+// 验证
+func (r *EnableRequest) Validate() error {
+
+	check := []string{}
+
+	if r.GetCardId() == 0 {
+		check = append(check, "CardId")
+	}
+
+	if r.GetSqlScript() == "" {
+		check = append(check, "SqlScript")
+	}
+
+	if r.GetDBInfo() == nil {
+		check = append(check, "DBInfo")
+	}
+
+	if r.GetDBInfo().GetHost() == "" {
+		check = append(check, "Host")
+	}
+
+	if r.GetDBInfo().GetPort() == 0 {
+		check = append(check, "Port")
+	}
+
+	if r.GetDBInfo().GetUser() == "" {
+		check = append(check, "User")
+	}
+
+	if r.GetDBInfo().GetPwd() == "" {
+		check = append(check, "PassWord")
+	}
+
+	if r.GetDBInfo().GetDBName() == "" {
+		check = append(check, "DBName")
+	}
+
+	if r.GetDBInfo().GetDBType() == "" {
+		check = append(check, "DBType")
+	}
+
+	if len(check) != 0 {
+		return errors.New(strings.Join(check, ", ") + " 不能为空")
+	}
+
+	return nil
+
 }
