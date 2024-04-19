@@ -88,11 +88,11 @@ type EveryType int32
 
 const (
 	EveryType_EvNone   EveryType = 0 // 未定义
-	EveryType_EvMinute EveryType = 1 // 分钟
-	EveryType_EvHour   EveryType = 2 // 小时
-	EveryType_EvDay    EveryType = 3 // 天
-	EveryType_EvWeek   EveryType = 4 // 周
-	EveryType_EvMonth  EveryType = 5 // 月
+	EveryType_EvMinute EveryType = 1 // N分钟
+	EveryType_EvHour   EveryType = 2 // N小时
+	EveryType_EvDay    EveryType = 3 // N天
+	EveryType_EvWeek   EveryType = 4 // N周
+	EveryType_EvMonth  EveryType = 5 // N月
 )
 
 // Enum value maps for EveryType.
@@ -1478,7 +1478,7 @@ type Crontab struct {
 
 	// 调度状态
 	Enable    bool       `protobuf:"varint,1,opt,name=Enable,proto3" json:"Enable,omitempty"`
-	LifeCycle *LifeCycle `protobuf:"bytes,2,opt,name=LifeCycle,proto3" json:"LifeCycle,omitempty"` // 公共配置
+	LifeCycle *LifeCycle `protobuf:"bytes,2,opt,name=LifeCycle,proto3" json:"LifeCycle,omitempty"` // 生命周期
 	// 执行周期
 	//
 	// Types that are assignable to Cycle:

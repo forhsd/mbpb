@@ -132,11 +132,11 @@ message Expression {
 // 间隔时间执行类型
 enum EveryType {
     EvNone = 0; // 未定义
-    EvMinute = 1; // 分钟
-    EvHour = 2; // 小时
-    EvDay = 3; // 天
-    EvWeek = 4; // 周
-    EvMonth = 5; // 月
+    EvMinute = 1; // N分钟
+    EvHour = 2; // N小时
+    EvDay = 3; // N天
+    EvWeek = 4; // N周
+    EvMonth = 5; // N月
 }
 
 // 时间循环周期执行
@@ -204,7 +204,7 @@ message Crontab {
     // 调度状态
     bool Enable = 1;
 
-    LifeCycle LifeCycle = 2; // 公共配置
+    LifeCycle LifeCycle = 2; // 生命周期
     
     // 执行周期
     oneof Cycle {
