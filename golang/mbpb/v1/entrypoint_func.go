@@ -10,6 +10,8 @@ import (
 	"github.com/cespare/xxhash/v2"
 )
 
+const Week = 7
+
 var (
 	TABLE_PREFIX string
 	TABLE_SUFFIX string

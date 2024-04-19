@@ -118,6 +118,18 @@ message CycleEvery {
     optional Expression Expression = 2; // 表达式
 }
 
+// 时间循环周期执行
+message CycleEveryTime {
+    EveryTimeType EveryType = 1; // 类型
+    oneof EveryTime {
+        CycleEveryDay EveryDay = 3; // 每天
+        CycleEveryWeekMonth EveryWeek = 4; // 每周
+        CycleEveryWeekMonth EveryMonth = 5; // 每月
+        CycleEveryYear EveryQuarter = 6; // 每季
+        CycleEveryYear EveryYear = 7; // 每年
+    }
+}
+
 // 间隔周期
 message EveryExpress {
     EveryType CycleType = 1; // 类型
@@ -139,23 +151,10 @@ enum EveryType {
     EvMonth = 5; // N月
 }
 
-// 时间循环周期执行
-message CycleEveryTime {
-    EveryTimeType EveryType = 1; // 类型
-    oneof EveryTime {
-        CycleEveryDay EveryDay = 3; // 每天
-        CycleEveryWeekMonth EveryWeek = 4; // 每周
-        CycleEveryWeekMonth EveryMonth = 5; // 每月
-        CycleEveryYear EveryQuarter = 6; // 每季
-        CycleEveryYear EveryYear = 7; // 每年
-    }
-}
-
 // 每天
 message CycleEveryDay {
     CycleHour RunTime = 1; // 运行时间
 }
-
 
 // 每月
 message CycleEveryWeekMonth {

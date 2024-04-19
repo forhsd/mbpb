@@ -55,3 +55,4 @@ message Ack {
     optional mbpb.Error Error = 3;
 }
 
+// [deprecated = true]
