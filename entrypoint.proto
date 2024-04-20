@@ -121,11 +121,12 @@ message CycleEvery {
 // 时间循环周期执行
 message CycleEveryTime {
     EveryTimeType EveryType = 1; // 类型
+    CycleHour RunTime = 2; // 运行时间
     oneof EveryTime {
         CycleEveryDay EveryDay = 3; // 每天
-        CycleEveryWeekMonth EveryWeek = 4; // 每周
-        CycleEveryWeekMonth EveryMonth = 5; // 每月
-        CycleEveryYear EveryQuarter = 6; // 每季
+        CycleEveryWeek EveryWeek = 4; // 每周
+        CycleEveryMonth EveryMonth = 5; // 每月
+        CycleEveryQuarter EveryQuarter = 6; // 每季
         CycleEveryYear EveryYear = 7; // 每年
     }
 }
@@ -153,19 +154,73 @@ enum EveryType {
 
 // 每天
 message CycleEveryDay {
-    CycleHour RunTime = 1; // 运行时间
+}
+
+// 周枚举
+enum enumWeek {
+    Sun = 0; // 周日
+    Mon = 1; // 周一
+    Tue = 2; // 周二
+    Wed = 3; // 周三
+    Thu = 4; // 周四
+    Fri = 5; // 周五
+    Sat = 6; // 周六
+}
+
+// 每周
+message CycleEveryWeek {
+    // 周 切片
+    repeated enumWeek Week = 2;
 }
 
 // 每月
-message CycleEveryWeekMonth {
-    CycleHour RunTime = 1; // 运行时间
-    CycleDay Day = 2; // 天
+message CycleEveryMonth {
+    repeated int32 Day = 1; // 天 切片
 }
 
-// 执行周期按年
+// 月枚举
+enum enumMonth {
+    None = 0;
+    Jan = 1;
+    Feb = 2;
+    Mar = 3;
+    Apr = 4;
+    May = 5;
+    Jun = 6;
+    Jul = 7;
+    Aug = 8;
+    Sep = 9;
+    Oct = 10;
+    Nov = 11;
+    Dec = 12;
+}
+
+// 月份
+message WithMonth {
+    // 月份
+    enumMonth Month = 1;
+    // 天 切片 -1=最后1天
+    repeated int32 Day = 2;
+}
+
+// 按年 包含12个月 每个月不同的天
 message CycleEveryYear {
-    CycleHour RunTime = 1; // 运行时间
-    map<int32,CycleDay> Day = 2; // 天 切片 -1=最后1天
+    // 月 切片
+    repeated WithMonth Month = 1;
+}
+
+// 季
+message WithQuarter {
+    // 第N个月
+    int32 Month = 1;
+    // 天 切片 -1=最后1天
+    repeated int32 Day = 2;
+}
+
+// 每季度
+message CycleEveryQuarter {
+    // 季切片
+    repeated WithQuarter Month = 1;
 }
 
 // 小时
@@ -174,11 +229,6 @@ message CycleHour {
     repeated int32 Minute = 2; // 分钟 切片
 }
 
-// 每月
-message CycleDay {
-    // 某天 -1 为最后1天
-    repeated int32 Day = 1; // 天 切片
-}
 
 // 周期类型
 enum EveryTimeType {
@@ -192,9 +242,12 @@ enum EveryTimeType {
 
 // 生命周期
 message LifeCycle {
-    string Zone = 1; // 时区
-    string StartTime = 2; // 执行时间
-    optional string EndTime = 3; // 结束时间 无限期为null
+    // 时区
+    string Zone = 1;
+    // 执行时间
+    string StartTime = 2;
+    // 结束时间 无限期为null
+    optional string EndTime = 3;
 }
 
 // Crontab表达式
@@ -203,13 +256,17 @@ message Crontab {
     // 调度状态
     bool Enable = 1;
 
-    LifeCycle LifeCycle = 2; // 生命周期
+    // 生命周期
+    LifeCycle LifeCycle = 2;
     
     // 执行周期
     oneof Cycle {
-        CycleOnce CycleOnce = 3; // 执行1次
-        CycleEvery CycleEvery = 4; // 周期间隔
-        CycleEveryTime CycleEveryTime = 5; // 时间循环周期执行
+        // 只执行1次
+        CycleOnce CycleOnce = 3;
+        // 每隔多久执行一次
+        CycleEvery CycleEvery = 4;
+        // 时间循环周期执行
+        CycleEveryTime CycleEveryTime = 5;
     }
 }
 
