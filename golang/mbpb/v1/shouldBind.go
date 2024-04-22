@@ -97,35 +97,6 @@ func (db *Crontab) Value() (driver.Value, error) {
 	return string(buff), nil
 }
 
-func (db *Tables) Scan(value interface{}) error {
-
-	if value == nil {
-		return nil
-	}
-
-	b, ok := value.([]byte)
-	if !ok {
-		return fmt.Errorf("value is not []byte, value: %v", value)
-	}
-
-	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, db)
-}
-
-// Value Valuer
-func (db *Tables) Value() (driver.Value, error) {
-
-	if db == nil {
-		return nil, nil
-	}
-
-	buff, err := sonic.Marshal(db)
-	if err != nil {
-		return nil, err
-	}
-	return string(buff), nil
-}
-
 func (db *Extra) Scan(value interface{}) error {
 
 	if value == nil {
