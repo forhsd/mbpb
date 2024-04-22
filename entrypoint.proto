@@ -36,24 +36,14 @@ message EnableRequest {
     int64 CardId = 3; // Card ID
     optional Crontab Crontab = 4; //运行周期表达式
     string SqlScript = 5; // SQL代码
-    Tables Tables = 6; // SQL引用的实体表
+    repeated Table Tables = 6; // SQL引用的实体表
     optional Extra Extra = 7; // 附加信息
-}
-
-// 实体表切片
-message Tables {
-    repeated Table Table = 1;
-}
-
-// 字段切片
-message Columns {
-    repeated Column Column = 1; // 字段
 }
 
 // 启用回复
 message EnableReply {
     Table OutTable = 1; // 结果表
-    Columns Columns = 2; // 字段类
+    repeated Column Columns = 2; // 字段类
     optional google.protobuf.Timestamp NextRunTime = 3; // 下次运行时间
     optional Error Error = 4; // 错误信息 可选
 }
@@ -68,7 +58,7 @@ message Request {
 message Reply {
     optional string Key = 1; // Key
     optional int64 SequenceID = 2; // 序列ID
-    optional Columns Columns = 3; // 字段类
+    repeated Column Columns = 3; // 字段类
     optional Error Error = 4; // 错误信息 可选
 }
 

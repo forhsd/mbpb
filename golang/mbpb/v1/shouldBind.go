@@ -21,7 +21,7 @@ func (req *EnableRequest) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return protojson.Unmarshal(b, &req)
+	return protojson.Unmarshal(b, req)
 }
 
 // Value Valuer
@@ -51,7 +51,7 @@ func (db *DBDetail) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, &db)
+	return sonic.Unmarshal(b, db)
 }
 
 // Value Valuer
@@ -80,7 +80,7 @@ func (db *Crontab) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, &db)
+	return sonic.Unmarshal(b, db)
 }
 
 // Value Valuer
@@ -109,7 +109,7 @@ func (db *Tables) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, &db)
+	return sonic.Unmarshal(b, db)
 }
 
 // Value Valuer
@@ -138,7 +138,7 @@ func (db *Extra) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, &db)
+	return sonic.Unmarshal(b, db)
 }
 
 // Value Valuer
