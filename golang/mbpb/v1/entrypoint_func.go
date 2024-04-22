@@ -6,6 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/cespare/xxhash/v2"
 )
@@ -37,6 +38,11 @@ func (r *EnableRequest) Hash() string {
 	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
 	hash := xxhash.Sum64([]byte(key))
 	return "etl_" + strconv.FormatUint(hash, 10)
+}
+
+func (r *EnableRequest) SequenceID(t time.Time) uint64 {
+	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), t.UnixNano())
+	return xxhash.Sum64([]byte(key))
 }
 
 // 获取输出Schema
