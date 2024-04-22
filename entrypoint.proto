@@ -157,7 +157,7 @@ message CycleEveryDay {
 }
 
 // 周枚举
-enum enumWeek {
+enum EnumWeek {
     Sun = 0; // 周日
     Mon = 1; // 周一
     Tue = 2; // 周二
@@ -170,7 +170,7 @@ enum enumWeek {
 // 每周
 message CycleEveryWeek {
     // 周 切片
-    repeated enumWeek Week = 2;
+    repeated EnumWeek Week = 2;
 }
 
 // 每月
@@ -179,7 +179,7 @@ message CycleEveryMonth {
 }
 
 // 月枚举
-enum enumMonth {
+enum EnumMonth {
     None = 0;
     Jan = 1;
     Feb = 2;
@@ -198,7 +198,7 @@ enum enumMonth {
 // 月份
 message WithMonth {
     // 月份
-    enumMonth Month = 1;
+    EnumMonth Month = 1;
     // 天 切片 -1=最后1天
     repeated int32 Day = 2;
 }
