@@ -34,10 +34,16 @@ func (s RunStatus) Has(status RunStatus) bool {
 	return s&status != 0
 }
 
+func (r *Request) GetUniqueId() string {
+	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
+	hash := xxhash.Sum64([]byte(key))
+	return strconv.FormatUint(hash, 10)
+}
+
 func (r *EnableRequest) Hash() string {
 	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
 	hash := xxhash.Sum64([]byte(key))
-	return "etl_" + strconv.FormatUint(hash, 10)
+	return strconv.FormatUint(hash, 10)
 }
 
 func (r *EnableRequest) SequenceID(t time.Time) uint64 {
