@@ -34,10 +34,11 @@ func (s RunStatus) Has(status RunStatus) bool {
 	return s&status != 0
 }
 
-func (r *Request) GetUniqueId() string {
+func (r *Request) GetUniqueId() *string {
 	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
 	hash := xxhash.Sum64([]byte(key))
-	return strconv.FormatUint(hash, 10)
+	hashsrt := strconv.FormatUint(hash, 10)
+	return &hashsrt
 }
 
 func (r *EnableRequest) Hash() string {
@@ -81,6 +82,20 @@ func (r *EnableRequest) GetOutputTable() string {
 		},
 		"__",
 	)
+}
+
+// 验证
+func (r *Request) Validate() error {
+
+	if r.GetEnterpriseID() == "" {
+		return errors.New("EnterpriseID不能为空")
+	}
+
+	if r.GetCardId() == 0 {
+		return errors.New("CardId不能为空")
+	}
+
+	return nil
 }
 
 // 验证

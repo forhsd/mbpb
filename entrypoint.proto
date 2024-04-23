@@ -57,7 +57,7 @@ message Request {
 // 行动回复
 message Reply {
     optional string Key = 1; // Key
-    optional int64 SequenceID = 2; // 序列ID
+    optional string SequenceID = 2; // 序列ID
     repeated Column Columns = 3; // 字段类
     optional Error Error = 4; // 错误信息 可选
 }
