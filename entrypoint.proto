@@ -38,6 +38,7 @@ message EnableRequest {
     string SqlScript = 5; // SQL代码
     repeated Table Tables = 6; // SQL引用的实体表
     optional Extra Extra = 7; // 附加信息
+    optional Over Over = 8; // BI不传
 }
 
 // 启用回复
@@ -52,6 +53,12 @@ message EnableReply {
 message Request {
     string EnterpriseID = 1; // 企业ID
     int64 CardId = 2; // Card ID
+    optional Over Over = 3; // BI不传
+}
+
+message Over {
+    string Hash = 1;
+    string SequenceID = 2;
 }
 
 // 行动回复

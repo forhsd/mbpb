@@ -47,9 +47,16 @@ func (r *EnableRequest) Hash() string {
 	return strconv.FormatUint(hash, 10)
 }
 
-func (r *EnableRequest) SequenceID(t time.Time) uint64 {
+func (r *EnableRequest) SequenceID(t time.Time) string {
 	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), t.UnixNano())
-	return xxhash.Sum64([]byte(key))
+	hash := xxhash.Sum64([]byte(key))
+	return strconv.FormatUint(hash, 10)
+}
+
+func (r *Request) SequenceID(t time.Time) string {
+	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), t.UnixNano())
+	hash := xxhash.Sum64([]byte(key))
+	return strconv.FormatUint(hash, 10)
 }
 
 // 获取输出Schema
