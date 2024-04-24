@@ -47,14 +47,20 @@ func (r *EnableRequest) Hash() string {
 	return strconv.FormatUint(hash, 10)
 }
 
-func (r *EnableRequest) SequenceID(t time.Time) string {
-	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), t.UnixNano())
+func (r *EnableRequest) SequenceID(runRime *time.Time) string {
+	if runRime == nil {
+		runRime = &time.Time{}
+	}
+	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), runRime.UnixNano())
 	hash := xxhash.Sum64([]byte(key))
 	return strconv.FormatUint(hash, 10)
 }
 
-func (r *Request) SequenceID(t time.Time) string {
-	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), t.UnixNano())
+func (r *Request) SequenceID(runRime *time.Time) string {
+	if runRime == nil {
+		runRime = &time.Time{}
+	}
+	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), runRime.UnixNano())
 	hash := xxhash.Sum64([]byte(key))
 	return strconv.FormatUint(hash, 10)
 }

@@ -57,8 +57,9 @@ message Request {
 }
 
 message Over {
-    string Hash = 1;
-    string SequenceID = 2;
+    optional string Hash = 1;
+    optional string SequenceID = 2;
+    optional google.protobuf.Timestamp NextRunTime = 3;
 }
 
 // 行动回复
