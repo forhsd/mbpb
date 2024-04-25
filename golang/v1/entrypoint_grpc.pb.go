@@ -4,7 +4,7 @@
 // - protoc             v5.26.1
 // source: entrypoint.proto
 
-package proto
+package mbpb
 
 import (
 	context "context"
@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MBetl_Enable_FullMethodName  = "/proto.MBetl/Enable"
-	MBetl_Disable_FullMethodName = "/proto.MBetl/Disable"
-	MBetl_Run_FullMethodName     = "/proto.MBetl/Run"
-	MBetl_Cancel_FullMethodName  = "/proto.MBetl/Cancel"
+	MBetl_Enable_FullMethodName  = "/mbpb.MBetl/Enable"
+	MBetl_Disable_FullMethodName = "/mbpb.MBetl/Disable"
+	MBetl_Run_FullMethodName     = "/mbpb.MBetl/Run"
+	MBetl_Cancel_FullMethodName  = "/mbpb.MBetl/Cancel"
 )
 
 // MBetlClient is the client API for MBetl service.
@@ -203,7 +203,7 @@ func _MBetl_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interf
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MBetl_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "proto.MBetl",
+	ServiceName: "mbpb.MBetl",
 	HandlerType: (*MBetlServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

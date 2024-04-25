@@ -1,4 +1,4 @@
-package proto
+package mbpb
 
 import (
 	"database/sql/driver"
