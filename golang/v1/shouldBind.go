@@ -75,13 +75,13 @@ func (s *RunStatus) Scan(value interface{}) error {
 		return nil
 	}
 
-	b, ok := value.([]byte)
+	b, ok := value.(int64)
 	if !ok {
 		return fmt.Errorf("value is not []byte, value: %v", value)
 	}
 
-	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, s)
+	*s = RunStatus(b)
+	return nil
 }
 
 // Value Valuer
