@@ -26,34 +26,38 @@ message HealthReply {
     bool Healthy = 1;
 }
 
+// 概览
 message Overview {
-    string Key = 1;
-    string Owner = 2;
-    string EnterpriseID = 3;
-    int64 CardId = 4;
-    int64 SequenceID = 5;
-    optional int64 RowsCount = 6;
-    optional int64 QueryUPtime = 7;
-    optional int64 WriteUPtime = 8;
-    optional int64 TakeUpTime = 9;
-    mbpb.RunStatus RunStatus = 10;
-    int32 Progress = 11;
-    optional google.protobuf.Timestamp StartTime = 12;
-    optional google.protobuf.Timestamp EndTime = 13;
-    optional google.protobuf.Timestamp NextRunTime = 14;
-    Detail Detail = 15;
+    string Key = 1; // 
+    string Owner = 2; // 节点
+    string EnterpriseID = 3; // 企业ID
+    int64 CardId = 4; // CardId
+    int64 SequenceID = 5; // 序列ID
+    optional int64 QueryUPtime = 7; // 查询耗时(毫秒)
+    optional int64 WriteUPtime = 8; // 写入耗时(毫秒)
+    optional int64 TakeUpTime = 9; // 运行耗时(毫秒)
+    mbpb.RunStatus RunStatus = 10; // 运行状态
+    int32 Progress = 11; // 当前进度
+    int64 StartTime = 12; // 开始运行时间 精确到纳秒
+    int64 EndTime = 13; // 结束运行时间 精确到纳秒
+    optional int64 NextRunTime = 14; // 下次运行时间 精确到纳秒
+    Detail Detail = 15; // 详情
+    mbpb.RunType RunType = 16; // 运行类型
 }
 
+// 详情
 message Detail {
-    optional mbpb.Table OutTable = 1;
-    optional int32 ColsCount = 2;
-    optional mbpb.Error Error = 3;
+    optional int64 RowsCount = 1; // 行数
+    repeated mbpb.Column Columns = 2; // 字段类
+    optional mbpb.Table OutTable = 3; // 实体表
+    optional mbpb.Error Error = 4; // 错误明细
 }
 
 message Ack {
     string Key = 1;
     int64 SequenceID = 2;
     optional mbpb.Error Error = 3;
+    optional google.protobuf.Timestamp Now = 4;
 }
 
 // [deprecated = true]
