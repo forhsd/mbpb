@@ -2,6 +2,7 @@ package mbpb
 
 import (
 	context "context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"mbetl/ecode"
@@ -10,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/bytedance/sonic"
 	"github.com/cespare/xxhash/v2"
 )
 
@@ -177,4 +179,40 @@ func (x *Overview) TryErrorState(ctx context.Context, err error) {
 			Msg: err.Error(),
 		}
 	}
+}
+
+// Value 实现了gorm.Type接口，用于获取存储的值
+func (o *Overview) Value() (driver.Value, error) {
+
+	bytes, err := sonic.Marshal(o)
+	if err != nil {
+		return nil, err
+	}
+
+	return string(bytes), nil
+}
+
+// Scan 实现了sql.Scanner接口，用于从数据库中扫描值
+func (o *Overview) Scan(value interface{}) error {
+
+	if value == nil {
+		return nil
+	}
+
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New("invalid type for JSONBType")
+	}
+
+	err := sonic.Unmarshal(bytes, o)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GormDataType 实现了gorm.Type接口，用于指定Gorm中的数据类型
+func (j *Overview) GormDataType() string {
+	return "jsonb"
 }
