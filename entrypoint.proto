@@ -59,7 +59,13 @@ message Request {
 message Over {
     optional string Hash = 1;
     optional string SequenceID = 2;
-    optional google.protobuf.Timestamp NextRunTime = 3;
+    optional RunType RunType = 3;
+    optional google.protobuf.Timestamp NextRunTime = 4;
+}
+
+enum RunType {
+    Cycle = 0; // 周期
+    Spark = 1; // 手动
 }
 
 // 行动回复
