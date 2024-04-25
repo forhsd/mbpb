@@ -55,7 +55,7 @@ message Detail {
 
 message Ack {
     string Key = 1;
-    int64 SequenceID = 2;
+    string SequenceID = 2;
     optional mbpb.Error Error = 3;
     optional google.protobuf.Timestamp Now = 4;
 }
