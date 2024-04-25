@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v5.26.1
-// source: mbnk.proto
+// source: health.proto
 
-package mbnk
+package mbpb
 
 import (
 	context "context"
@@ -210,5 +210,5 @@ var MBLink_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "mbnk.proto",
+	Metadata: "health.proto",
 }

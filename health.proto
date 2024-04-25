@@ -3,12 +3,13 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "entrypoint.proto";
 
-option go_package = "github.com/forhsd/mbpb/golang/mbnk/v1;mbnk";
+option go_package = "github.com/forhsd/mbpb/golang/mbpb/v1;mbpb";
 option java_multiple_files = false;
-option java_package = "com.holder.mbnk.proto";
-option java_outer_classname = "mbnk";
+option java_package = "com.holder.grpc.proto";
+option java_outer_classname = "MBEtlpbProto";
 
 package mbnk;
+
 
 service MBLink {
     // 健康检查
