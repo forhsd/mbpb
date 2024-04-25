@@ -1,8 +1,10 @@
 package mbpb
 
 import (
+	context "context"
 	"errors"
 	"fmt"
+	"mbetl/ecode"
 	"os"
 	"strconv"
 	"strings"
@@ -158,4 +160,21 @@ func (r *EnableRequest) Validate() error {
 
 	return nil
 
+}
+
+func (x *Overview) TryErrorState(ctx context.Context, err error) {
+
+	// 用户取消或失败
+	if ctx.Err() == context.Canceled {
+		x.RunStatus = RunStatus_Cancel
+		x.Detail.Error = &Error{
+			Code: int32(ecode.UserCancellation),
+			Msg:  ctx.Err().Error(),
+		}
+	} else {
+		x.RunStatus = RunStatus_Fail
+		x.Detail.Error = &Error{
+			Msg: err.Error(),
+		}
+	}
 }
