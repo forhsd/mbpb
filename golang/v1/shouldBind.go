@@ -68,6 +68,32 @@ func (db *DBDetail) Value() (driver.Value, error) {
 	return string(buff), nil
 }
 
+// DBDetail
+func (s *RunStatus) Scan(value interface{}) error {
+
+	if value == nil {
+		return nil
+	}
+
+	b, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("value is not []byte, value: %v", value)
+	}
+
+	// return json.Unmarshal(b, &db)
+	return sonic.Unmarshal(b, s)
+}
+
+// Value Valuer
+func (s *RunStatus) Value() (driver.Value, error) {
+
+	if s == nil {
+		return nil, nil
+	}
+
+	return int(*s), nil
+}
+
 func (db *Crontab) Scan(value interface{}) error {
 
 	if value == nil {
