@@ -2,12 +2,12 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/forhsd/mbpb/golang/mbpb/v1;mbpb";
+option go_package = "github.com/forhsd/mbpb/golang/v1;proto";
 option java_multiple_files = false;
 option java_package = "com.otorp.grpc.proto";
 option java_outer_classname = "MBEtlpbProto";
 
-package mbpb;
+package proto;
 
 
 service MBetl {

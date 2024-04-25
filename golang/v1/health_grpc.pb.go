@@ -4,7 +4,7 @@
 // - protoc             v5.26.1
 // source: health.proto
 
-package mbpb
+package proto
 
 import (
 	context "context"
@@ -19,8 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MBLink_Health_FullMethodName = "/mbnk.MBLink/Health"
-	MBLink_ReView_FullMethodName = "/mbnk.MBLink/ReView"
+	MBLink_Health_FullMethodName = "/proto.MBLink/Health"
+	MBLink_ReView_FullMethodName = "/proto.MBLink/ReView"
 )
 
 // MBLinkClient is the client API for MBLink service.
@@ -193,7 +193,7 @@ func (x *mBLinkReViewServer) Recv() (*Overview, error) {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MBLink_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "mbnk.MBLink",
+	ServiceName: "proto.MBLink",
 	HandlerType: (*MBLinkServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams: []grpc.StreamDesc{

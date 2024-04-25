@@ -3,12 +3,12 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 import "entrypoint.proto";
 
-option go_package = "github.com/forhsd/mbpb/golang/mbpb/v1;mbpb";
+option go_package = "github.com/forhsd/mbpb/golang/v1;proto";
 option java_multiple_files = false;
 option java_package = "com.holder.grpc.proto";
 option java_outer_classname = "MBEtlpbProto";
 
-package mbnk;
+package proto;
 
 
 service MBLink {
@@ -36,7 +36,7 @@ message Overview {
     optional int64 QueryUPtime = 7;
     optional int64 WriteUPtime = 8;
     optional int64 TakeUpTime = 9;
-    mbpb.RunStatus RunStatus = 10;
+    proto.RunStatus RunStatus = 10;
     int32 Progress = 11;
     optional google.protobuf.Timestamp StartTime = 12;
     optional google.protobuf.Timestamp EndTime = 13;
@@ -45,15 +45,15 @@ message Overview {
 }
 
 message Detail {
-    optional mbpb.Table OutTable = 1;
+    optional proto.Table OutTable = 1;
     optional int32 ColsCount = 2;
-    optional mbpb.Error Error = 3;
+    optional proto.Error Error = 3;
 }
 
 message Ack {
     string Key = 1;
     int64 SequenceID = 2;
-    optional mbpb.Error Error = 3;
+    optional proto.Error Error = 3;
 }
 
 // [deprecated = true]
