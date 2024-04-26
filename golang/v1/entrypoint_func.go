@@ -166,18 +166,21 @@ func (r *EnableRequest) Validate() error {
 
 func (x *Overview) TryErrorState(ctx context.Context, err error) {
 
+	if x.Detail == nil {
+		x.Detail = &Detail{}
+	}
+	if x.Detail.Error == nil {
+		x.Detail.Error = &Error{}
+	}
+
 	// 用户取消或失败
 	if ctx.Err() == context.Canceled {
 		x.RunStatus = RunStatus_Cancel
-		x.Detail.Error = &Error{
-			Code: int32(ecode.UserCancellation),
-			Msg:  ctx.Err().Error(),
-		}
+		x.Detail.Error.Code = int32(ecode.UserCancellation)
+		x.Detail.Error.Msg = ctx.Err().Error()
 	} else {
 		x.RunStatus = RunStatus_Fail
-		x.Detail.Error = &Error{
-			Msg: err.Error(),
-		}
+		x.Detail.Error.Msg = err.Error()
 	}
 }
 
