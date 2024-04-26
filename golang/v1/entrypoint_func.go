@@ -173,6 +173,8 @@ func (x *Overview) TryErrorState(ctx context.Context, err error) {
 		x.Detail.Error = &Error{}
 	}
 
+	errs := ecode.FromContextError(err)
+
 	// 用户取消或失败
 	if ctx.Err() == context.Canceled {
 		x.RunStatus = RunStatus_Cancel
@@ -180,7 +182,11 @@ func (x *Overview) TryErrorState(ctx context.Context, err error) {
 		x.Detail.Error.Msg = ctx.Err().Error()
 	} else {
 		x.RunStatus = RunStatus_Fail
-		x.Detail.Error.Msg = err.Error()
+		x.Detail.Error.Code = int32(errs.Code())
+		if x.Detail.Error.Msg != "" {
+			return
+		}
+		x.Detail.Error.Msg = errs.Message()
 	}
 }
 

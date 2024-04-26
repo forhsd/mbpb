@@ -28,29 +28,29 @@ message HealthReply {
 
 // 概览
 message Overview {
-    string Key = 1; // 
-    string Owner = 2; // 节点
-    string EnterpriseID = 3; // 企业ID
-    int64 CardId = 4; // CardId
-    string SequenceID = 5; // 序列ID
-    optional int64 QueryUPtime = 7; // 查询耗时(毫秒)
-    optional int64 WriteUPtime = 8; // 写入耗时(毫秒)
-    optional int64 TakeUpTime = 9; // 运行耗时(毫秒)
-    mbpb.RunStatus RunStatus = 10; // 运行状态
-    int32 Progress = 11; // 当前进度
-    int64 StartTime = 12; // 开始运行时间 精确到纳秒
-    int64 EndTime = 13; // 结束运行时间 精确到纳秒
-    optional int64 NextRunTime = 14; // 下次运行时间 精确到纳秒
-    Detail Detail = 15; // 详情
-    mbpb.RunType RunType = 16; // 运行类型
+    string key = 1; // 
+    string owner = 2; // 节点
+    string enterpriseID = 3; // 企业ID
+    int64 cardId = 4; // CardId
+    string sequenceID = 5; // 序列ID
+    optional int64 queryUPtime = 7; // 查询耗时(毫秒)
+    optional int64 writeUPtime = 8; // 写入耗时(毫秒)
+    optional int64 takeUpTime = 9; // 运行耗时(毫秒)
+    mbpb.RunStatus runStatus = 10; // 运行状态
+    int32 progress = 11; // 当前进度
+    int64 startTime = 12; // 开始运行时间 精确到纳秒
+    int64 endTime = 13; // 结束运行时间 精确到纳秒
+    optional int64 nextRunTime = 14; // 下次运行时间 精确到纳秒
+    Detail detail = 15; // 详情
+    mbpb.RunType runType = 16; // 运行类型
 }
 
 // 详情
 message Detail {
-    optional int64 RowsCount = 1; // 行数
-    repeated mbpb.Column Columns = 2; // 字段类
-    optional mbpb.Table OutTable = 3; // 实体表
-    optional mbpb.Error Error = 4; // 错误明细
+    optional int64 rowsCount = 1; // 行数
+    repeated mbpb.Column columns = 2; // 字段类
+    optional mbpb.Table outTable = 3; // 实体表
+    optional mbpb.Error error = 4; // 错误明细
 }
 
 message Ack {

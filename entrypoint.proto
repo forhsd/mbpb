@@ -78,14 +78,14 @@ message Reply {
 
 // 实体表
 message Table {
-    string Schema = 1;
-    string Table = 2;
+    string schema = 1;
+    string table = 2;
 }
 
 // 字段类
 message Column {
-    string Name = 1;
-    string Type = 2;
+    string name = 1;
+    string type = 2;
 }
 
 // 运行状态
@@ -289,6 +289,6 @@ message Extra {
 
 // 错误信息
 message Error {
-    int32 Code = 1; // 错误码
-    string Msg = 2; // 错误信息
+    int32 code = 1; // 错误码
+    string msg = 2; // 错误信息
 }
