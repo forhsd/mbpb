@@ -57,11 +57,11 @@ message Request {
 }
 
 message Over {
-    optional string Hash = 1;
-    optional string SequenceID = 2;
-    optional RunType RunType = 3;
-    optional google.protobuf.Timestamp RunTime = 4;
-    optional google.protobuf.Timestamp NextRunTime = 5;
+    optional string Hash = 1; // Hash
+    optional string SequenceID = 2; // SequenceID
+    optional RunType RunType = 3; // 运行类型
+    optional google.protobuf.Timestamp RunTime = 4; // 运行时间
+    optional google.protobuf.Timestamp NextRunTime = 5; // 下次运行时间
 }
 
 enum RunType {

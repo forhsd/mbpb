@@ -42,7 +42,14 @@ message Overview {
     int64 EndTime = 13; // 结束运行时间 精确到纳秒
     optional int64 NextRunTime = 14; // 下次运行时间 精确到纳秒
     Detail Detail = 15; // 详情
-    mbpb.RunType RunType = 16; // 运行类型
+    LifeTime LifeTime = 16;
+    mbpb.RunType RunType = 17; // 运行类型
+}
+
+message LifeTime {
+    string StartTime = 1;
+    string EndTime = 2;
+    string NextRunTime = 3;
 }
 
 // 详情

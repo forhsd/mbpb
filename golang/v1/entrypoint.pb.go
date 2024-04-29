@@ -634,11 +634,11 @@ type Over struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Hash        *string                `protobuf:"bytes,1,opt,name=Hash,proto3,oneof" json:"Hash,omitempty"`
-	SequenceID  *string                `protobuf:"bytes,2,opt,name=SequenceID,proto3,oneof" json:"SequenceID,omitempty"`
-	RunType     *RunType               `protobuf:"varint,3,opt,name=RunType,proto3,enum=mbpb.RunType,oneof" json:"RunType,omitempty"`
-	RunTime     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=RunTime,proto3,oneof" json:"RunTime,omitempty"`
-	NextRunTime *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=NextRunTime,proto3,oneof" json:"NextRunTime,omitempty"`
+	Hash        *string                `protobuf:"bytes,1,opt,name=Hash,proto3,oneof" json:"Hash,omitempty"`                          // Hash
+	SequenceID  *string                `protobuf:"bytes,2,opt,name=SequenceID,proto3,oneof" json:"SequenceID,omitempty"`              // SequenceID
+	RunType     *RunType               `protobuf:"varint,3,opt,name=RunType,proto3,enum=mbpb.RunType,oneof" json:"RunType,omitempty"` // 运行类型
+	RunTime     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=RunTime,proto3,oneof" json:"RunTime,omitempty"`                    // 运行时间
+	NextRunTime *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=NextRunTime,proto3,oneof" json:"NextRunTime,omitempty"`            // 下次运行时间
 }
 
 func (x *Over) Reset() {
