@@ -60,7 +60,8 @@ message Over {
     optional string Hash = 1;
     optional string SequenceID = 2;
     optional RunType RunType = 3;
-    optional google.protobuf.Timestamp NextRunTime = 4;
+    optional google.protobuf.Timestamp RunTime = 4;
+    optional google.protobuf.Timestamp NextRunTime = 5;
 }
 
 enum RunType {
