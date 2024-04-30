@@ -15,7 +15,10 @@ import (
 	"github.com/cespare/xxhash/v2"
 )
 
-const Week = 7
+const (
+	Week = 7
+	CST8 = "Asia/Shanghai"
+)
 
 var (
 	TABLE_PREFIX string
@@ -77,6 +80,20 @@ func (r *EnableRequest) GetOutputSchema() string {
 	}
 
 	return fmt.Sprintf("result_set_%v_db", r.GetEnterpriseID())
+}
+
+// 获取时区
+func (r *EnableRequest) GetZone() string {
+
+	zone := r.GetCrontab().GetLifeCycle().GetZone()
+	if zone == "" {
+		zone = CST8
+	}
+	return zone
+}
+
+func (r *EnableRequest) GetLocation() (*time.Location, error) {
+	return time.LoadLocation(r.GetZone())
 }
 
 // 获取输出表
