@@ -38,19 +38,13 @@ message Overview {
     optional int64 TakeUpTime = 9; // 运行耗时(毫秒)
     mbpb.RunStatus RunStatus = 10; // 运行状态
     int32 Progress = 11; // 当前进度
-    int64 StartTime = 12; // 开始运行时间 精确到纳秒
-    int64 EndTime = 13; // 结束运行时间 精确到纳秒
-    optional int64 NextRunTime = 14; // 下次运行时间 精确到纳秒
+    string StartTime = 12; // 开始运行时间 精确到纳秒
+    string EndTime = 13; // 结束运行时间 精确到纳秒
+    optional string NextRunTime = 14; // 下次运行时间 精确到纳秒
     Detail Detail = 15; // 详情
-    LifeTime LifeTime = 16;
-    mbpb.RunType RunType = 17; // 运行类型
+    mbpb.RunType RunType = 16; // 运行类型
 }
 
-message LifeTime {
-    string StartTime = 1;
-    string EndTime = 2;
-    string NextRunTime = 3;
-}
 
 // 详情
 message Detail {

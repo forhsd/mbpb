@@ -45,7 +45,7 @@ message EnableRequest {
 message EnableReply {
     Table OutTable = 1; // 结果表
     repeated Column Columns = 2; // 字段类
-    optional google.protobuf.Timestamp NextRunTime = 3; // 下次运行时间
+    optional string NextRunTime = 3; // 下次运行时间
     optional Error Error = 4; // 错误信息 可选
 }
 
