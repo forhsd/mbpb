@@ -61,7 +61,8 @@ message Over {
     optional string SequenceID = 2; // SequenceID
     optional RunType RunType = 3; // 运行类型
     optional google.protobuf.Timestamp RunTime = 4; // 运行时间
-    optional google.protobuf.Timestamp NextRunTime = 5; // 下次运行时间
+    optional google.protobuf.Timestamp StartRunTime = 5; // 开始运行时间
+    optional google.protobuf.Timestamp NextRunTime = 6; // 下次运行时间
 }
 
 enum RunType {

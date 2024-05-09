@@ -203,11 +203,19 @@ func (x *Overview) GetErrorEnding(ctx context.Context, err error) {
 	// 用户取消或失败
 	if ctx.Err() == context.Canceled {
 		x.RunStatus = RunStatus_Cancel
-		x.Detail.Error.Code = int32(ecode.UserCancellation)
-		x.Detail.Error.Msg = ctx.Err().Error()
+
+		if x.Detail.Error.Code == 0 {
+			x.Detail.Error.Code = int32(ecode.UserCancellation)
+		}
+		if x.Detail.Error.Msg == "" {
+			x.Detail.Error.Msg = ctx.Err().Error()
+		}
 	} else {
 		x.RunStatus = RunStatus_Fail
-		x.Detail.Error.Code = int32(errs.Code())
+
+		if x.Detail.Error.Code == 0 {
+			x.Detail.Error.Code = int32(errs.Code())
+		}
 		if x.Detail.Error.Msg != "" {
 			return
 		}
