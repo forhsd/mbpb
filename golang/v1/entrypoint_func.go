@@ -181,7 +181,15 @@ func (r *EnableRequest) Validate() error {
 
 }
 
-func (x *Overview) TryErrorState(ctx context.Context, err error) {
+func (x *Overview) GetErrorEnding(ctx context.Context, err error) {
+
+	if x == nil {
+		x = &Overview{}
+	}
+
+	if x.EndTime == "" {
+		x.EndTime = time.Now().Local().Format(time.DateTime)
+	}
 
 	if x.Detail == nil {
 		x.Detail = &Detail{}
