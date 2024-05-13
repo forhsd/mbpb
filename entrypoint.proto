@@ -34,11 +34,12 @@ message EnableRequest {
     DBDetail DBInfo = 1; // 数据库信息
     string EnterpriseID = 2; // 企业ID
     int64 CardId = 3; // Card ID
-    optional Crontab Crontab = 4; //运行周期表达式
-    string SqlScript = 5; // SQL代码
-    repeated Table Tables = 6; // SQL引用的实体表
-    optional Extra Extra = 7; // 附加信息
-    optional Over Over = 8; // BI不传
+    int64 UserId = 4; // 创建人
+    optional Crontab Crontab = 5; //运行周期表达式
+    string SqlScript = 6; // SQL代码
+    repeated Table Tables = 7; // SQL引用的实体表
+    optional Extra Extra = 8; // 附加信息
+    optional Over Over = 9; // BI不传
 }
 
 // 启用回复

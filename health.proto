@@ -32,7 +32,8 @@ message Overview {
     string Owner = 2; // 节点
     string EnterpriseID = 3; // 企业ID
     int64 CardId = 4; // CardId
-    string SequenceID = 5; // 序列ID
+    int64 UserId = 5; // 创建人
+    string SequenceID = 6; // 序列ID
     optional int64 QueryUPtime = 7; // 查询耗时(毫秒)
     optional int64 WriteUPtime = 8; // 写入耗时(毫秒)
     optional int64 TakeUpTime = 9; // 运行耗时(毫秒)
