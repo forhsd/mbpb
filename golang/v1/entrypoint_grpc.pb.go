@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	MBetl_Enable_FullMethodName  = "/mbpb.MBetl/Enable"
-	MBetl_Disable_FullMethodName = "/mbpb.MBetl/Disable"
-	MBetl_Run_FullMethodName     = "/mbpb.MBetl/Run"
-	MBetl_Cancel_FullMethodName  = "/mbpb.MBetl/Cancel"
+	MBetl_Enable_FullMethodName      = "/mbpb.MBetl/Enable"
+	MBetl_Disable_FullMethodName     = "/mbpb.MBetl/Disable"
+	MBetl_Run_FullMethodName         = "/mbpb.MBetl/Run"
+	MBetl_Cancel_FullMethodName      = "/mbpb.MBetl/Cancel"
+	MBetl_DataLineage_FullMethodName = "/mbpb.MBetl/DataLineage"
 )
 
 // MBetlClient is the client API for MBetl service.
@@ -37,6 +38,8 @@ type MBetlClient interface {
 	Run(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
 	// 取消
 	Cancel(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
+	// 数据血亲
+	DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*DwcReply, error)
 }
 
 type mBetlClient struct {
@@ -83,6 +86,15 @@ func (c *mBetlClient) Cancel(ctx context.Context, in *Request, opts ...grpc.Call
 	return out, nil
 }
 
+func (c *mBetlClient) DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*DwcReply, error) {
+	out := new(DwcReply)
+	err := c.cc.Invoke(ctx, MBetl_DataLineage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MBetlServer is the server API for MBetl service.
 // All implementations must embed UnimplementedMBetlServer
 // for forward compatibility
@@ -95,6 +107,8 @@ type MBetlServer interface {
 	Run(context.Context, *Request) (*Reply, error)
 	// 取消
 	Cancel(context.Context, *Request) (*Reply, error)
+	// 数据血亲
+	DataLineage(context.Context, *Request) (*DwcReply, error)
 	mustEmbedUnimplementedMBetlServer()
 }
 
@@ -113,6 +127,9 @@ func (UnimplementedMBetlServer) Run(context.Context, *Request) (*Reply, error) {
 }
 func (UnimplementedMBetlServer) Cancel(context.Context, *Request) (*Reply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
+}
+func (UnimplementedMBetlServer) DataLineage(context.Context, *Request) (*DwcReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DataLineage not implemented")
 }
 func (UnimplementedMBetlServer) mustEmbedUnimplementedMBetlServer() {}
 
@@ -199,6 +216,24 @@ func _MBetl_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MBetl_DataLineage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).DataLineage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_DataLineage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).DataLineage(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MBetl_ServiceDesc is the grpc.ServiceDesc for MBetl service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -221,6 +256,10 @@ var MBetl_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Cancel",
 			Handler:    _MBetl_Cancel_Handler,
+		},
+		{
+			MethodName: "DataLineage",
+			Handler:    _MBetl_DataLineage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -24,6 +24,9 @@ service MBetl {
     // 取消
     rpc Cancel(Request)returns(Reply){}
 
+    // 数据血亲
+    rpc DataLineage(Request)returns(DwcReply){}
+
     // 单向流
     // rpc CallBack(stream CallBackRequest)returns(Error){}
     
@@ -78,10 +81,36 @@ message Reply {
     optional Error Error = 4; // 错误信息 可选
 }
 
+message DwcReply{
+
+    repeated Dwc Dwc = 1; // 血亲
+    repeated Graph Graph = 2; // 关系图
+}
+
+enum SourceType {
+    RemoteDB = 0; // 远程数据库
+    ImportData = 1; // 导入数据
+    DataFill = 2; // 数据填报
+    MbEtl = 3; // ETL
+    RemoteApi = 4; // RemoteAPI
+}
+
+// 关系
+message Graph {
+    string Parent = 1; // 上游
+    string Child = 2; // 下游
+}
+
+message Dwc {
+    string UniqueKey = 1; // 唯一键
+    SourceType SourceType = 2; // 来源类型
+}
+
 // 实体表
 message Table {
-    string Schema = 1;
-    string Table = 2;
+    string Schema = 1; // schema
+    string Table = 2; // table
+    Dwc Dwc = 3; // 血亲
 }
 
 // 字段类
