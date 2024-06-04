@@ -1,9 +1,11 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 option go_package = "github.com/forhsd/mbpb/golang/v1;mbpb";
-option java_multiple_files = false;
+option java_multiple_files = true;
 option java_package = "com.otorp.grpc.proto";
 option java_outer_classname = "MBEtlpbProto";
 
@@ -25,7 +27,12 @@ service MBetl {
     rpc Cancel(Request)returns(Reply){}
 
     // 数据血亲
-    rpc DataLineage(Request)returns(Graph){}
+    rpc DataLineage(Request)returns(Graph){
+        option (google.api.http) = {
+          get: "/flow"
+        //   body: "*"
+        };
+    }
 
     // 单向流
     // rpc CallBack(stream CallBackRequest)returns(Error){}
@@ -56,7 +63,7 @@ message EnableReply {
 // 行动请求
 message Request {
     string EnterpriseID = 1; // 企业ID
-    int64 CardId = 2; // Card ID
+    int64 CardId = 2 [(validate.rules).int64.gte = 1]; // Card ID
     optional Over Over = 3; // BI不传
 }
 

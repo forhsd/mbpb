@@ -4,8 +4,8 @@ import "google/protobuf/timestamp.proto";
 import "entrypoint.proto";
 
 option go_package = "github.com/forhsd/mbpb/golang/v1;mbpb";
-option java_multiple_files = false;
-option java_package = "com.holder.grpc.proto";
+option java_multiple_files = true;
+option java_package = "com.health.grpc.proto";
 option java_outer_classname = "MBEtlpbProto";
 
 package mbpb;

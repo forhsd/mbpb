@@ -1,0 +1,200 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "health.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MBLink"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {},
+  "definitions": {
+    "mbpbAck": {
+      "type": "object",
+      "properties": {
+        "Key": {
+          "type": "string"
+        },
+        "SequenceID": {
+          "type": "string"
+        },
+        "Error": {
+          "$ref": "#/definitions/mbpbError"
+        },
+        "Now": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "mbpbColumn": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Type": {
+          "type": "string"
+        }
+      },
+      "title": "字段类"
+    },
+    "mbpbDetail": {
+      "type": "object",
+      "properties": {
+        "RowsCount": {
+          "type": "string",
+          "format": "int64",
+          "title": "行数"
+        },
+        "Columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/mbpbColumn"
+          },
+          "title": "字段类"
+        },
+        "OutTable": {
+          "$ref": "#/definitions/mbpbTable",
+          "title": "实体表"
+        },
+        "Error": {
+          "$ref": "#/definitions/mbpbError",
+          "title": "错误明细"
+        }
+      },
+      "title": "详情"
+    },
+    "mbpbError": {
+      "type": "object",
+      "properties": {
+        "Code": {
+          "type": "integer",
+          "format": "int32",
+          "title": "错误码"
+        },
+        "Msg": {
+          "type": "string",
+          "title": "错误信息"
+        }
+      },
+      "title": "错误信息"
+    },
+    "mbpbHealthReply": {
+      "type": "object",
+      "properties": {
+        "Healthy": {
+          "type": "boolean"
+        }
+      }
+    },
+    "mbpbRunStatus": {
+      "type": "string",
+      "enum": [
+        "Unknown",
+        "NotRunning",
+        "Scheme",
+        "Running",
+        "Success",
+        "Fail",
+        "Cancel"
+      ],
+      "default": "Unknown",
+      "description": "- Unknown: 未知\n - NotRunning: 未运行\n - Scheme: 计划中\n - Running: 运行中\n - Success: 运行成功\n - Fail: 运行失败\n - Cancel: 已取消",
+      "title": "运行状态"
+    },
+    "mbpbRunType": {
+      "type": "string",
+      "enum": [
+        "Cycle",
+        "Spark"
+      ],
+      "default": "Cycle",
+      "title": "- Cycle: 周期\n - Spark: 手动"
+    },
+    "mbpbSource": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "title": "BaseId+Type Hash"
+        },
+        "BaseId": {
+          "type": "string",
+          "title": "原始唯一键"
+        },
+        "Type": {
+          "$ref": "#/definitions/mbpbSourceType",
+          "title": "类型"
+        }
+      }
+    },
+    "mbpbSourceType": {
+      "type": "string",
+      "enum": [
+        "RemoteDB",
+        "ImportData",
+        "DataFill",
+        "MbEtl",
+        "RemoteApi"
+      ],
+      "default": "RemoteDB",
+      "title": "- RemoteDB: 远程数据库\n - ImportData: 导入数据\n - DataFill: 数据填报\n - MbEtl: ETL\n - RemoteApi: RemoteAPI"
+    },
+    "mbpbTable": {
+      "type": "object",
+      "properties": {
+        "Schema": {
+          "type": "string",
+          "title": "schema"
+        },
+        "Table": {
+          "type": "string",
+          "title": "table"
+        },
+        "Source": {
+          "$ref": "#/definitions/mbpbSource",
+          "title": "来源"
+        }
+      },
+      "title": "实体表"
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}
