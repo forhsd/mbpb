@@ -8,6 +8,8 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
+var protoJsonOP = protojson.MarshalOptions{EmitUnpopulated: true}
+
 // DBDetail
 func (req *EnableRequest) Scan(value interface{}) error {
 
@@ -31,7 +33,7 @@ func (req *EnableRequest) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	buff, err := protojson.Marshal(req)
+	buff, err := protoJsonOP.Marshal(req)
 	if err != nil {
 		return nil, err
 	}

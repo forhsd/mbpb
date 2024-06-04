@@ -103,8 +103,9 @@ message Edge {
 }
 
 message Source {
-    string Id = 1; // 唯一键
-    SourceType Type = 2; // 类型
+    string Id = 1; // BaseId+Type Hash
+    string BaseId = 2; // 原始唯一键
+    SourceType Type = 3; // 类型
 }
 
 // 实体表
