@@ -315,9 +315,9 @@ func Relatives(work *flow.Workflow) *Node {
 					eid := uuid.NewString()
 					// eid := flow.String(r)
 					getNode(parent).Edges = append(getNode(parent).Edges, &Edge{
-						Id:      eid,
-						Sources: []string{getNode(up).ID},
-						Targets: []string{getNode(r).ID},
+						Id:     eid,
+						Source: getNode(up).ID,
+						Target: getNode(r).ID,
 					})
 				}
 			}

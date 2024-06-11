@@ -97,6 +97,19 @@
         }
       }
     },
+    "mbpbParent": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "title": "原始唯一键"
+        },
+        "Type": {
+          "$ref": "#/definitions/mbpbSourceType",
+          "title": "类型"
+        }
+      }
+    },
     "mbpbRunStatus": {
       "type": "string",
       "enum": [
@@ -124,7 +137,7 @@
     "mbpbSource": {
       "type": "object",
       "properties": {
-        "id": {
+        "Id": {
           "type": "string",
           "title": "BaseId+Type Hash"
         },
@@ -139,16 +152,9 @@
         "Prev": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "$ref": "#/definitions/mbpbParent"
           },
           "title": "上级 BI不传"
-        },
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/mbpblabels"
-          }
         }
       }
     },
@@ -182,14 +188,6 @@
         }
       },
       "title": "实体表"
-    },
-    "mbpblabels": {
-      "type": "object",
-      "properties": {
-        "text": {
-          "type": "string"
-        }
-      }
     },
     "protobufAny": {
       "type": "object",

@@ -312,22 +312,16 @@
     "mbpbEdge": {
       "type": "object",
       "properties": {
-        "id": {
+        "Id": {
           "type": "string",
           "title": "唯一键"
         },
-        "sources": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
+        "Source": {
+          "type": "string",
           "title": "上游"
         },
-        "targets": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
+        "Target": {
+          "type": "string",
           "title": "下游"
         }
       },
@@ -502,11 +496,11 @@
     "mbpbGraph": {
       "type": "object",
       "properties": {
-        "id": {
+        "Id": {
           "type": "string",
           "title": "id"
         },
-        "children": {
+        "Children": {
           "type": "array",
           "items": {
             "type": "object",
@@ -514,7 +508,7 @@
           },
           "title": "节点"
         },
-        "edges": {
+        "Edges": {
           "type": "array",
           "items": {
             "type": "object",
@@ -522,7 +516,7 @@
           },
           "title": "边缘"
         },
-        "error": {
+        "Error": {
           "$ref": "#/definitions/mbpbError",
           "title": "错误信息"
         }
@@ -573,6 +567,19 @@
         }
       }
     },
+    "mbpbParent": {
+      "type": "object",
+      "properties": {
+        "Id": {
+          "type": "string",
+          "title": "原始唯一键"
+        },
+        "Type": {
+          "$ref": "#/definitions/mbpbSourceType",
+          "title": "类型"
+        }
+      }
+    },
     "mbpbReply": {
       "type": "object",
       "properties": {
@@ -611,7 +618,7 @@
     "mbpbSource": {
       "type": "object",
       "properties": {
-        "id": {
+        "Id": {
           "type": "string",
           "title": "BaseId+Type Hash"
         },
@@ -626,16 +633,9 @@
         "Prev": {
           "type": "object",
           "additionalProperties": {
-            "type": "string"
+            "$ref": "#/definitions/mbpbParent"
           },
           "title": "上级 BI不传"
-        },
-        "labels": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/mbpblabels"
-          }
         }
       }
     },
@@ -706,14 +706,6 @@
         }
       },
       "title": "季"
-    },
-    "mbpblabels": {
-      "type": "object",
-      "properties": {
-        "text": {
-          "type": "string"
-        }
-      }
     },
     "protobufAny": {
       "type": "object",
