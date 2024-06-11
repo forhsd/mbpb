@@ -13,6 +13,8 @@ import (
 
 	"github.com/bytedance/sonic"
 	"github.com/cespare/xxhash/v2"
+	flow "github.com/forhsd/go-workflow"
+	"github.com/google/uuid"
 )
 
 const (
@@ -257,4 +259,71 @@ func (o *Overview) Scan(value interface{}) error {
 // GormDataType 实现了gorm.Type接口，用于指定Gorm中的数据类型
 func (j *Overview) GormDataType() string {
 	return "jsonb"
+}
+
+type Node struct {
+	ID       string  `json:"id"`
+	Children []*Node `json:"children,omitempty"`
+	Edges    []*Edge `json:"edges,omitempty"`
+	X        int     `json:"x,omitempty"`
+	Y        int     `json:"y,omitempty"`
+	Width    int     `json:"width,omitempty"`
+	Height   int     `json:"height,omitempty"`
+	Labels   []Label `json:"labels,omitempty"`
+}
+
+type Label struct {
+	Text string `json:"text,omitempty"`
+}
+
+// 血亲
+func Relatives(work *flow.Workflow) *Node {
+
+	root := &Node{ID: "root"}
+	nodes := map[flow.Steper]*Node{
+		work: root,
+	}
+	getNode := func(s flow.Steper) *Node {
+		node, ok := nodes[s]
+		if !ok {
+			// node = &Node{ID: uuid.NewString()}
+			node = &Node{ID: flow.String(s)}
+			nodes[s] = node
+		}
+		return node
+	}
+	flow.Traverse(work, func(s flow.Steper, walked []flow.Steper) flow.TraverseDecision {
+		if w, ok := s.(interface {
+			Unwrap() []flow.Steper
+			UpstreamOf(flow.Steper) map[flow.Steper]flow.StepResult
+		}); ok {
+			for _, r := range w.Unwrap() {
+				n := getNode(r)
+				n.Labels = append(n.Labels, Label{flow.String(r)})
+				parent := s
+				for i := len(walked) - 1; i >= 0; i-- {
+					if _, ok := walked[i].(interface{ Unwrap() []flow.Steper }); ok {
+						if i < len(walked)-1 {
+							parent = walked[i+1]
+							break
+						}
+					}
+				}
+				getNode(parent).Children = append(getNode(parent).Children, n)
+
+				for up := range w.UpstreamOf(r) {
+					eid := uuid.NewString()
+					// eid := flow.String(r)
+					getNode(parent).Edges = append(getNode(parent).Edges, &Edge{
+						Id:      eid,
+						Sources: []string{getNode(up).ID},
+						Targets: []string{getNode(r).ID},
+					})
+				}
+			}
+		}
+		return flow.TraverseContinue
+	})
+
+	return root
 }
