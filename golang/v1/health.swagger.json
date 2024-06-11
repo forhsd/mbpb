@@ -124,7 +124,7 @@
     "mbpbSource": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "BaseId+Type Hash"
         },
@@ -135,6 +135,20 @@
         "Type": {
           "$ref": "#/definitions/mbpbSourceType",
           "title": "类型"
+        },
+        "Prev": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "上级 BI不传"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/mbpblabels"
+          }
         }
       }
     },
@@ -145,10 +159,11 @@
         "ImportData",
         "DataFill",
         "MbEtl",
-        "RemoteApi"
+        "RemoteApi",
+        "UnknownSrc"
       ],
       "default": "RemoteDB",
-      "title": "- RemoteDB: 远程数据库\n - ImportData: 导入数据\n - DataFill: 数据填报\n - MbEtl: ETL\n - RemoteApi: RemoteAPI"
+      "title": "- RemoteDB: 远程数据库\n - ImportData: 导入数据\n - DataFill: 数据填报\n - MbEtl: ETL\n - RemoteApi: RemoteAPI\n - UnknownSrc: 未知"
     },
     "mbpbTable": {
       "type": "object",
@@ -167,6 +182,14 @@
         }
       },
       "title": "实体表"
+    },
+    "mbpblabels": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
     },
     "protobufAny": {
       "type": "object",

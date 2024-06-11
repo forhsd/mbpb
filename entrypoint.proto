@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
-import "validate/validate.proto";
+// import "validate/validate.proto";
 
 option go_package = "github.com/forhsd/mbpb/golang/v1;mbpb";
 option java_multiple_files = true;
@@ -63,7 +63,8 @@ message EnableReply {
 // 行动请求
 message Request {
     string EnterpriseID = 1; // 企业ID
-    int64 CardId = 2 [(validate.rules).int64.gte = 1]; // Card ID
+    // int64 CardId = 2 [(validate.rules).int64.gte = 1]; // Card ID
+    int64 CardId = 2;
     optional Over Over = 3; // BI不传
 }
 
@@ -89,9 +90,10 @@ message Reply {
 }
 
 message Graph {
-    string Id = 1; // id
-    repeated Source Nodes = 2; // 节点
-    repeated Edge Edges = 3; // 边缘
+    string id = 1; // id
+    repeated Source children = 2; // 节点
+    repeated Edge edges = 3; // 边缘
+    optional Error error = 4; // 错误信息
 }
 
 enum SourceType {
@@ -100,19 +102,26 @@ enum SourceType {
     DataFill = 2; // 数据填报
     MbEtl = 3; // ETL
     RemoteApi = 4; // RemoteAPI
+    UnknownSrc = 999; // 未知
 }
 
 // 边缘
 message Edge {
-    string Id = 1; // 唯一键
-    string Source = 2; // 上游
-    string Target = 3; // 下游
+    string id = 1; // 唯一键
+    repeated string sources = 2; // 上游
+    repeated string targets = 3; // 下游
 }
 
 message Source {
-    string Id = 1; // BaseId+Type Hash
+    string id = 1; // BaseId+Type Hash
     string BaseId = 2; // 原始唯一键
     SourceType Type = 3; // 类型
+    map<string, string> Prev = 4; // 上级 BI不传
+    repeated labels labels = 5;
+}
+
+message labels {
+    string text = 1;
 }
 
 // 实体表

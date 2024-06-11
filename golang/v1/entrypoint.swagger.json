@@ -38,7 +38,7 @@
           },
           {
             "name": "CardId",
-            "description": "Card ID",
+            "description": "int64 CardId = 2 [(validate.rules).int64.gte = 1]; // Card ID",
             "in": "query",
             "required": false,
             "type": "string",
@@ -312,16 +312,22 @@
     "mbpbEdge": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "唯一键"
         },
-        "Source": {
-          "type": "string",
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "title": "上游"
         },
-        "Target": {
-          "type": "string",
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
           "title": "下游"
         }
       },
@@ -496,11 +502,11 @@
     "mbpbGraph": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "id"
         },
-        "Nodes": {
+        "children": {
           "type": "array",
           "items": {
             "type": "object",
@@ -508,13 +514,17 @@
           },
           "title": "节点"
         },
-        "Edges": {
+        "edges": {
           "type": "array",
           "items": {
             "type": "object",
             "$ref": "#/definitions/mbpbEdge"
           },
           "title": "边缘"
+        },
+        "error": {
+          "$ref": "#/definitions/mbpbError",
+          "title": "错误信息"
         }
       }
     },
@@ -601,7 +611,7 @@
     "mbpbSource": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "BaseId+Type Hash"
         },
@@ -612,6 +622,20 @@
         "Type": {
           "$ref": "#/definitions/mbpbSourceType",
           "title": "类型"
+        },
+        "Prev": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "上级 BI不传"
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/mbpblabels"
+          }
         }
       }
     },
@@ -622,10 +646,11 @@
         "ImportData",
         "DataFill",
         "MbEtl",
-        "RemoteApi"
+        "RemoteApi",
+        "UnknownSrc"
       ],
       "default": "RemoteDB",
-      "title": "- RemoteDB: 远程数据库\n - ImportData: 导入数据\n - DataFill: 数据填报\n - MbEtl: ETL\n - RemoteApi: RemoteAPI"
+      "title": "- RemoteDB: 远程数据库\n - ImportData: 导入数据\n - DataFill: 数据填报\n - MbEtl: ETL\n - RemoteApi: RemoteAPI\n - UnknownSrc: 未知"
     },
     "mbpbTable": {
       "type": "object",
@@ -681,6 +706,14 @@
         }
       },
       "title": "季"
+    },
+    "mbpblabels": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      }
     },
     "protobufAny": {
       "type": "object",
