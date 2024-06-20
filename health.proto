@@ -44,6 +44,7 @@ message Overview {
     optional string NextRunTime = 14; // 下次运行时间 精确到纳秒
     Detail Detail = 15; // 详情
     mbpb.RunType RunType = 16; // 运行类型
+    bool FailStat = 17 [json_name = "-"]; // 失败状态
 }
 
 
