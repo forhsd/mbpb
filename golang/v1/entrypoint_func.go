@@ -27,17 +27,6 @@ var (
 	TABLE_SUFFIX string
 )
 
-func Hash(item ...any) uint64 {
-
-	var arr []string
-	for _, val := range item {
-		arr = append(arr, fmt.Sprintf("%v", val))
-	}
-
-	key := strings.Join(arr, ".")
-	return xxhash.Sum64([]byte(key))
-}
-
 // 使用按位或设置状态
 func (s *RunStatus) Set(status RunStatus) {
 	// *s |= status
