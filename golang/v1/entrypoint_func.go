@@ -27,6 +27,17 @@ var (
 	TABLE_SUFFIX string
 )
 
+func Hash(item ...any) uint64 {
+
+	var arr []string
+	for _, val := range item {
+		arr = append(arr, fmt.Sprintf("%v", val))
+	}
+
+	key := strings.Join(arr, ".")
+	return xxhash.Sum64([]byte(key))
+}
+
 // 使用按位或设置状态
 func (s *RunStatus) Set(status RunStatus) {
 	// *s |= status
@@ -262,7 +273,7 @@ func (j *Overview) GormDataType() string {
 }
 
 type Node struct {
-	ID       string  `json:"id"`
+	ID       uint64  `json:"id"`
 	Children []*Node `json:"children,omitempty"`
 	Edges    []*Edge `json:"edges,omitempty"`
 	X        int     `json:"x,omitempty"`
@@ -279,7 +290,7 @@ type Label struct {
 // 血亲
 func Relatives(work *flow.Workflow) *Node {
 
-	root := &Node{ID: "root"}
+	root := &Node{ID: 0}
 	nodes := map[flow.Steper]*Node{
 		work: root,
 	}
@@ -287,7 +298,9 @@ func Relatives(work *flow.Workflow) *Node {
 		node, ok := nodes[s]
 		if !ok {
 			// node = &Node{ID: uuid.NewString()}
-			node = &Node{ID: flow.String(s)}
+			t := flow.String(s)
+			id, _ := strconv.ParseUint(t, 10, 64)
+			node = &Node{ID: id}
 			nodes[s] = node
 		}
 		return node

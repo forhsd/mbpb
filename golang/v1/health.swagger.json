@@ -97,7 +97,7 @@
         }
       }
     },
-    "mbpbParent": {
+    "mbpbProperty": {
       "type": "object",
       "properties": {
         "Id": {
@@ -139,6 +139,7 @@
       "properties": {
         "Id": {
           "type": "string",
+          "format": "uint64",
           "title": "BaseId+Type Hash"
         },
         "BaseId": {
@@ -152,11 +153,12 @@
         "Prev": {
           "type": "object",
           "additionalProperties": {
-            "$ref": "#/definitions/mbpbParent"
+            "$ref": "#/definitions/mbpbProperty"
           },
           "title": "上级 BI不传"
         }
-      }
+      },
+      "title": "来源"
     },
     "mbpbSourceType": {
       "type": "string",

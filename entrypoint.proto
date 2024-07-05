@@ -90,10 +90,10 @@ message Reply {
 }
 
 message Graph {
-    string Id = 1; // id
-    repeated Source Children = 2; // 节点
-    repeated Edge Edges = 3; // 边缘
-    optional Error Error = 4; // 错误信息
+    string Id = 1 [json_name = "id"]; // id
+    repeated Source Children = 2 [json_name = "children"]; // 节点
+    repeated Edge Edges = 3 [json_name = "edges"]; // 边缘
+    optional Error Error = 4 [json_name = "error"]; // 错误信息
 }
 
 enum SourceType {
@@ -108,18 +108,19 @@ enum SourceType {
 // 边缘
 message Edge {
     string Id = 1; // 唯一键
-    string Source = 2; // 上游
-    string Target = 3; // 下游
+    uint64 Source = 2; // 上游
+    uint64 Target = 3; // 下游
 }
 
+// 来源
 message Source {
-    string Id = 1; // BaseId+Type Hash
+    uint64 Id = 1; // BaseId+Type Hash
     string BaseId = 2; // 原始唯一键
     SourceType Type = 3; // 类型
-    map<string, Parent> Prev = 4; // 上级 BI不传
+    map<uint64, Property> Prev = 4; // 上级 BI不传
 }
 
-message Parent {
+message Property {
     string Id = 1; // 原始唯一键
     SourceType Type = 2; // 类型
 }
