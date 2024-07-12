@@ -19,11 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	MBetl_Enable_FullMethodName      = "/mbpb.MBetl/Enable"
-	MBetl_Disable_FullMethodName     = "/mbpb.MBetl/Disable"
-	MBetl_Run_FullMethodName         = "/mbpb.MBetl/Run"
-	MBetl_Cancel_FullMethodName      = "/mbpb.MBetl/Cancel"
-	MBetl_DataLineage_FullMethodName = "/mbpb.MBetl/DataLineage"
+	MBetl_Enable_FullMethodName         = "/mbpb.MBetl/Enable"
+	MBetl_Disable_FullMethodName        = "/mbpb.MBetl/Disable"
+	MBetl_Run_FullMethodName            = "/mbpb.MBetl/Run"
+	MBetl_Cancel_FullMethodName         = "/mbpb.MBetl/Cancel"
+	MBetl_Remove_FullMethodName         = "/mbpb.MBetl/Remove"
+	MBetl_DataLineage_FullMethodName    = "/mbpb.MBetl/DataLineage"
+	MBetl_TaskflowUPsert_FullMethodName = "/mbpb.MBetl/TaskflowUPsert"
 )
 
 // MBetlClient is the client API for MBetl service.
@@ -38,8 +40,12 @@ type MBetlClient interface {
 	Run(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
 	// 取消
 	Cancel(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Reply, error)
+	// 删除
+	Remove(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Error, error)
 	// 数据血亲
 	DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Graph, error)
+	// 任务流更新
+	TaskflowUPsert(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error)
 }
 
 type mBetlClient struct {
@@ -90,10 +96,30 @@ func (c *mBetlClient) Cancel(ctx context.Context, in *Request, opts ...grpc.Call
 	return out, nil
 }
 
+func (c *mBetlClient) Remove(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Error, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Error)
+	err := c.cc.Invoke(ctx, MBetl_Remove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *mBetlClient) DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Graph, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Graph)
 	err := c.cc.Invoke(ctx, MBetl_DataLineage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) TaskflowUPsert(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Error)
+	err := c.cc.Invoke(ctx, MBetl_TaskflowUPsert_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,8 +138,12 @@ type MBetlServer interface {
 	Run(context.Context, *Request) (*Reply, error)
 	// 取消
 	Cancel(context.Context, *Request) (*Reply, error)
+	// 删除
+	Remove(context.Context, *Request) (*Error, error)
 	// 数据血亲
 	DataLineage(context.Context, *Request) (*Graph, error)
+	// 任务流更新
+	TaskflowUPsert(context.Context, *TaskflowRequest) (*Error, error)
 	mustEmbedUnimplementedMBetlServer()
 }
 
@@ -133,8 +163,14 @@ func (UnimplementedMBetlServer) Run(context.Context, *Request) (*Reply, error) {
 func (UnimplementedMBetlServer) Cancel(context.Context, *Request) (*Reply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cancel not implemented")
 }
+func (UnimplementedMBetlServer) Remove(context.Context, *Request) (*Error, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Remove not implemented")
+}
 func (UnimplementedMBetlServer) DataLineage(context.Context, *Request) (*Graph, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DataLineage not implemented")
+}
+func (UnimplementedMBetlServer) TaskflowUPsert(context.Context, *TaskflowRequest) (*Error, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TaskflowUPsert not implemented")
 }
 func (UnimplementedMBetlServer) mustEmbedUnimplementedMBetlServer() {}
 
@@ -221,6 +257,24 @@ func _MBetl_Cancel_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MBetl_Remove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).Remove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_Remove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).Remove(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _MBetl_DataLineage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Request)
 	if err := dec(in); err != nil {
@@ -235,6 +289,24 @@ func _MBetl_DataLineage_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MBetlServer).DataLineage(ctx, req.(*Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_TaskflowUPsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskflowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).TaskflowUPsert(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_TaskflowUPsert_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).TaskflowUPsert(ctx, req.(*TaskflowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -263,8 +335,16 @@ var MBetl_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MBetl_Cancel_Handler,
 		},
 		{
+			MethodName: "Remove",
+			Handler:    _MBetl_Remove_Handler,
+		},
+		{
 			MethodName: "DataLineage",
 			Handler:    _MBetl_DataLineage_Handler,
+		},
+		{
+			MethodName: "TaskflowUPsert",
+			Handler:    _MBetl_TaskflowUPsert_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	MBLink_Health_FullMethodName = "/mbpb.MBLink/Health"
-	MBLink_ReView_FullMethodName = "/mbpb.MBLink/ReView"
+	MBLink_Health_FullMethodName   = "/mbpb.MBLink/Health"
+	MBLink_ReView_FullMethodName   = "/mbpb.MBLink/ReView"
+	MBLink_Workflow_FullMethodName = "/mbpb.MBLink/Workflow"
 )
 
 // MBLinkClient is the client API for MBLink service.
@@ -31,6 +32,8 @@ type MBLinkClient interface {
 	Health(ctx context.Context, opts ...grpc.CallOption) (MBLink_HealthClient, error)
 	// 运行情况
 	ReView(ctx context.Context, opts ...grpc.CallOption) (MBLink_ReViewClient, error)
+	// 工作流
+	Workflow(ctx context.Context, opts ...grpc.CallOption) (MBLink_WorkflowClient, error)
 }
 
 type mBLinkClient struct {
@@ -105,6 +108,38 @@ func (x *mBLinkReViewClient) Recv() (*Ack, error) {
 	return m, nil
 }
 
+func (c *mBLinkClient) Workflow(ctx context.Context, opts ...grpc.CallOption) (MBLink_WorkflowClient, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MBLink_ServiceDesc.Streams[2], MBLink_Workflow_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &mBLinkWorkflowClient{ClientStream: stream}
+	return x, nil
+}
+
+type MBLink_WorkflowClient interface {
+	Send(*WorkflowRequest) error
+	Recv() (*WorkflowReply, error)
+	grpc.ClientStream
+}
+
+type mBLinkWorkflowClient struct {
+	grpc.ClientStream
+}
+
+func (x *mBLinkWorkflowClient) Send(m *WorkflowRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *mBLinkWorkflowClient) Recv() (*WorkflowReply, error) {
+	m := new(WorkflowReply)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MBLinkServer is the server API for MBLink service.
 // All implementations must embed UnimplementedMBLinkServer
 // for forward compatibility
@@ -113,6 +148,8 @@ type MBLinkServer interface {
 	Health(MBLink_HealthServer) error
 	// 运行情况
 	ReView(MBLink_ReViewServer) error
+	// 工作流
+	Workflow(MBLink_WorkflowServer) error
 	mustEmbedUnimplementedMBLinkServer()
 }
 
@@ -125,6 +162,9 @@ func (UnimplementedMBLinkServer) Health(MBLink_HealthServer) error {
 }
 func (UnimplementedMBLinkServer) ReView(MBLink_ReViewServer) error {
 	return status.Errorf(codes.Unimplemented, "method ReView not implemented")
+}
+func (UnimplementedMBLinkServer) Workflow(MBLink_WorkflowServer) error {
+	return status.Errorf(codes.Unimplemented, "method Workflow not implemented")
 }
 func (UnimplementedMBLinkServer) mustEmbedUnimplementedMBLinkServer() {}
 
@@ -191,6 +231,32 @@ func (x *mBLinkReViewServer) Recv() (*Overview, error) {
 	return m, nil
 }
 
+func _MBLink_Workflow_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(MBLinkServer).Workflow(&mBLinkWorkflowServer{ServerStream: stream})
+}
+
+type MBLink_WorkflowServer interface {
+	Send(*WorkflowReply) error
+	Recv() (*WorkflowRequest, error)
+	grpc.ServerStream
+}
+
+type mBLinkWorkflowServer struct {
+	grpc.ServerStream
+}
+
+func (x *mBLinkWorkflowServer) Send(m *WorkflowReply) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *mBLinkWorkflowServer) Recv() (*WorkflowRequest, error) {
+	m := new(WorkflowRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MBLink_ServiceDesc is the grpc.ServiceDesc for MBLink service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -208,6 +274,12 @@ var MBLink_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "ReView",
 			Handler:       _MBLink_ReView_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Workflow",
+			Handler:       _MBLink_Workflow_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},

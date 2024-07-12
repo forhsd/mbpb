@@ -16,6 +16,8 @@ service MBLink {
     rpc Health(stream HealthRequest) returns (stream HealthReply) {}
     // 运行情况
     rpc ReView(stream Overview) returns (stream Ack) {}
+    // 工作流
+    rpc Workflow(stream mbpb.WorkflowRequest)returns(stream mbpb.WorkflowReply){}
 }
 
 message HealthRequest {

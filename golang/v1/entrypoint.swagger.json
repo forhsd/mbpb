@@ -94,6 +94,16 @@
     }
   },
   "definitions": {
+    "mbpbAction": {
+      "type": "string",
+      "enum": [
+        "Nothing",
+        "Join",
+        "Merge"
+      ],
+      "default": "Nothing",
+      "title": "- Nothing: 无任何动作\n - Join: 加入指定的工作流\n - Merge: 合并工作流"
+    },
     "mbpbColumn": {
       "type": "object",
       "properties": {
@@ -351,6 +361,29 @@
         "Error": {
           "$ref": "#/definitions/mbpbError",
           "title": "错误信息 可选"
+        },
+        "TaskType": {
+          "$ref": "#/definitions/mbpbTaskType",
+          "title": "任务类型"
+        },
+        "FlowExists": {
+          "type": "boolean",
+          "title": "任务流是否存在,存在提示加入,不存在提示新建"
+        },
+        "BeforeFlow": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/mbpbGraph"
+          },
+          "title": "流程图 key代表现有工作流ID\ntodo可能存在多个任务流,map 工作流ID"
+        },
+        "AfterFlow": {
+          "$ref": "#/definitions/mbpbGraph",
+          "title": "合并后、或加入后的工作流"
+        },
+        "ConfirmAction": {
+          "$ref": "#/definitions/mbpbAction",
+          "title": "确认动作,点击是或否后的动作"
         }
       },
       "title": "启用回复"
@@ -623,7 +656,7 @@
         "Id": {
           "type": "string",
           "format": "uint64",
-          "title": "BaseId+Type Hash"
+          "title": "baseId+type hash BI不传"
         },
         "BaseId": {
           "type": "string",
@@ -670,9 +703,23 @@
         "Source": {
           "$ref": "#/definitions/mbpbSource",
           "title": "来源"
+        },
+        "Target": {
+          "$ref": "#/definitions/mbpbSource",
+          "title": "目标 BI不传"
         }
       },
       "title": "实体表"
+    },
+    "mbpbTaskType": {
+      "type": "string",
+      "enum": [
+        "basicTask",
+        "flowTask"
+      ],
+      "default": "basicTask",
+      "description": "- basicTask: 基本任务\n - flowTask: 工作流",
+      "title": "任务类型"
     },
     "mbpbWithMonth": {
       "type": "object",

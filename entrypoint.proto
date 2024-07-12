@@ -26,6 +26,9 @@ service MBetl {
     // 取消
     rpc Cancel(Request)returns(Reply){}
 
+    // 删除
+    rpc Remove(Request)returns(Error){}
+
     // 数据血亲
     rpc DataLineage(Request)returns(Graph){
         option (google.api.http) = {
@@ -34,9 +37,33 @@ service MBetl {
         };
     }
 
+    // 任务流更新
+    rpc TaskflowUPsert(TaskflowRequest)returns(Error){}
+
     // 单向流
     // rpc CallBack(stream CallBackRequest)returns(Error){}
     
+}
+
+message WorkflowReply {
+    oneof Reply {
+        EnableReply EnableReply = 1;
+        Reply FlowReply = 2;
+    }
+}
+
+message WorkflowRequest {
+    oneof Request {
+        EnableRequest BaseworkRequest = 1;
+        Request FlowRequest = 2;
+    }
+}
+
+message TaskflowRequest {
+    Crontab Crontab = 1; //运行周期表达式,不能为空
+    int64 CallbackID = 2; // 回调ID
+    repeated int64 DisableFlowId = 3; // 禁用流ID列表
+    Action Action = 4; // 动作 加入 or 合并
 }
 
 // 启用请求
@@ -54,10 +81,40 @@ message EnableRequest {
 
 // 启用回复
 message EnableReply {
-    Table OutTable = 1; // 结果表
-    repeated Column Columns = 2; // 字段类
-    optional string NextRunTime = 3; // 下次运行时间
-    optional Error Error = 4; // 错误信息 可选
+    // 结果表
+    Table OutTable = 1;
+    // 字段类
+    repeated Column Columns = 2;
+    // 下次运行时间
+    optional string NextRunTime = 3;
+    // 错误信息 可选
+    optional Error Error = 4;
+    // 任务类型
+    TaskType TaskType = 5;
+    // 任务流是否存在,存在提示加入,不存在提示新建
+    bool FlowExists = 6;
+    // 流程图 key代表现有工作流ID
+    // todo可能存在多个任务流,map 工作流ID
+    map<int64,Graph> BeforeFlow = 7;
+    // 合并后、或加入后的工作流
+    Graph AfterFlow = 8;
+    // 确认动作,点击是或否后的动作
+    Action ConfirmAction = 9;
+}
+
+enum Action {
+    // 无任何动作 
+    Nothing = 0;
+    // 加入指定的工作流
+    Join = 1;
+    // 合并工作流
+    Merge = 2;
+}
+
+// 任务类型
+enum TaskType {
+    basicTask = 0; // 基本任务
+    flowTask = 1; // 工作流
 }
 
 // 行动请求
@@ -114,7 +171,7 @@ message Edge {
 
 // 来源
 message Source {
-    uint64 Id = 1; // BaseId+Type Hash
+    uint64 Id = 1; // baseId+type hash BI不传
     string BaseId = 2; // 原始唯一键
     SourceType Type = 3; // 类型
     map<uint64, Property> Prev = 4; // 上级 BI不传
@@ -130,6 +187,7 @@ message Table {
     string Schema = 1; // schema
     string Table = 2; // table
     Source Source = 3; // 来源
+    Source Target = 4; // 目标 BI不传
 }
 
 // 字段类
