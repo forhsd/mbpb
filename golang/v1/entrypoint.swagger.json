@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/flow": {
+    "/api/v1/flow": {
       "get": {
         "summary": "数据血亲",
         "operationId": "MBetl_DataLineage",
@@ -91,10 +91,78 @@
           "MBetl"
         ]
       }
+    },
+    "/api/v1/flow/spec": {
+      "get": {
+        "summary": "查询工作流定义",
+        "operationId": "MBetl_GetTaskflowSpec",
+        "responses": {
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "EnterpriseID",
+            "description": "企业ID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "CardId",
+            "description": "Card ID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "MBetl"
+        ]
+      }
+    },
+    "/api/v1/flow/status": {
+      "get": {
+        "summary": "查询工作流状态",
+        "operationId": "MBetl_GetTaskflowStatus",
+        "responses": {
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "EnterpriseID",
+            "description": "企业ID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "CardId",
+            "description": "Card ID",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "MBetl"
+        ]
+      }
     }
   },
   "definitions": {
-    "mbpbAction": {
+    "mbpbAcceptAction": {
       "type": "string",
       "enum": [
         "Nothing",
@@ -381,9 +449,16 @@
           "$ref": "#/definitions/mbpbGraph",
           "title": "合并后、或加入后的工作流"
         },
-        "ConfirmAction": {
-          "$ref": "#/definitions/mbpbAction",
+        "AcceptAction": {
+          "$ref": "#/definitions/mbpbAcceptAction",
           "title": "确认动作,点击是或否后的动作"
+        },
+        "flowMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/mbpbflowMap"
+          },
+          "title": "工作id列表"
         }
       },
       "title": "启用回复"
@@ -757,6 +832,19 @@
         }
       },
       "title": "季"
+    },
+    "mbpbflowMap": {
+      "type": "object",
+      "properties": {
+        "cardId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "flowId": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
     },
     "protobufAny": {
       "type": "object",

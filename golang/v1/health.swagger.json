@@ -17,6 +17,16 @@
   ],
   "paths": {},
   "definitions": {
+    "mbpbAcceptAction": {
+      "type": "string",
+      "enum": [
+        "Nothing",
+        "Join",
+        "Merge"
+      ],
+      "default": "Nothing",
+      "title": "- Nothing: 无任何动作\n - Join: 加入指定的工作流\n - Merge: 合并工作流"
+    },
     "mbpbAck": {
       "type": "object",
       "properties": {
@@ -34,16 +44,6 @@
           "format": "date-time"
         }
       }
-    },
-    "mbpbAction": {
-      "type": "string",
-      "enum": [
-        "Nothing",
-        "Join",
-        "Merge"
-      ],
-      "default": "Nothing",
-      "title": "- Nothing: 无任何动作\n - Join: 加入指定的工作流\n - Merge: 合并工作流"
     },
     "mbpbColumn": {
       "type": "object",
@@ -349,9 +349,16 @@
           "$ref": "#/definitions/mbpbGraph",
           "title": "合并后、或加入后的工作流"
         },
-        "ConfirmAction": {
-          "$ref": "#/definitions/mbpbAction",
+        "AcceptAction": {
+          "$ref": "#/definitions/mbpbAcceptAction",
           "title": "确认动作,点击是或否后的动作"
+        },
+        "flowMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/mbpbflowMap"
+          },
+          "title": "工作id列表"
         }
       },
       "title": "启用回复"
@@ -824,6 +831,19 @@
         },
         "FlowReply": {
           "$ref": "#/definitions/mbpbReply"
+        }
+      }
+    },
+    "mbpbflowMap": {
+      "type": "object",
+      "properties": {
+        "cardId": {
+          "type": "string",
+          "format": "int64"
+        },
+        "flowId": {
+          "type": "string",
+          "format": "int64"
         }
       }
     },

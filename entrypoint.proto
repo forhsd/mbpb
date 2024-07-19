@@ -32,13 +32,29 @@ service MBetl {
     // 数据血亲
     rpc DataLineage(Request)returns(Graph){
         option (google.api.http) = {
-          get: "/flow"
-        //   body: "*"
+            get: "/api/v1/flow"
+            // body: "*"
         };
     }
 
     // 任务流更新
     rpc TaskflowUPsert(TaskflowRequest)returns(Error){}
+
+    // 查询工作流定义
+    rpc GetTaskflowSpec(Identifier)returns(Graph){
+        option (google.api.http) = {
+            get: "/api/v1/flow/spec"
+            // body: "*"
+        };
+    }
+
+    // 查询工作流状态
+    rpc GetTaskflowStatus(Identifier)returns(stream Graph){
+        option (google.api.http) = {
+            get: "/api/v1/flow/status"
+            // body: "*"
+        };
+    }
 
     // 单向流
     // rpc CallBack(stream CallBackRequest)returns(Error){}
@@ -63,7 +79,7 @@ message TaskflowRequest {
     Crontab Crontab = 1; //运行周期表达式,不能为空
     int64 CallbackID = 2; // 回调ID
     repeated int64 DisableFlowId = 3; // 禁用流ID列表
-    Action Action = 4; // 动作 加入 or 合并
+    AcceptAction AcceptAction = 4; // 接受动作
 }
 
 // 启用请求
@@ -77,6 +93,11 @@ message EnableRequest {
     repeated Table Tables = 7; // SQL引用的实体表
     optional Extra Extra = 8; // 附加信息
     optional Over Over = 9; // BI不传
+}
+
+message Identifier {
+    string EnterpriseID = 1; // 企业ID
+    int64 CardId = 2; // Card ID
 }
 
 // 启用回复
@@ -99,10 +120,17 @@ message EnableReply {
     // 合并后、或加入后的工作流
     Graph AfterFlow = 8;
     // 确认动作,点击是或否后的动作
-    Action ConfirmAction = 9;
+    AcceptAction AcceptAction = 9;
+    // 工作id列表
+    map<uint64,flowMap> flowMap = 10;
 }
 
-enum Action {
+message flowMap {
+    int64 cardId = 1;
+    int64 flowId = 2;
+}
+
+enum AcceptAction {
     // 无任何动作 
     Nothing = 0;
     // 加入指定的工作流

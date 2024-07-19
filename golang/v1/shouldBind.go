@@ -211,3 +211,65 @@ func (db *Extra) Value() (driver.Value, error) {
 	}
 	return string(buff), nil
 }
+
+/*TaskflowRequest*/
+func (req *TaskflowRequest) Scan(value interface{}) error {
+
+	if value == nil {
+		return nil
+	}
+
+	b, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("value is not []byte, value: %v", value)
+	}
+
+	// return json.Unmarshal(b, &db)
+	return protojson.Unmarshal(b, req)
+}
+
+func (req *TaskflowRequest) Value() (driver.Value, error) {
+
+	if req == nil {
+		return nil, nil
+	}
+
+	buff, err := protoJsonOP.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
+}
+
+/*TaskflowRequest*/
+
+/*Graph*/
+func (req *Graph) Scan(value interface{}) error {
+
+	if value == nil {
+		return nil
+	}
+
+	b, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("value is not []byte, value: %v", value)
+	}
+
+	// return json.Unmarshal(b, &db)
+	return protojson.Unmarshal(b, req)
+}
+
+func (req *Graph) Value() (driver.Value, error) {
+
+	if req == nil {
+		return nil, nil
+	}
+
+	buff, err := protoJsonOP.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
+}
+
+/*Graph*/

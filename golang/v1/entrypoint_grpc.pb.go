@@ -19,13 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	MBetl_Enable_FullMethodName         = "/mbpb.MBetl/Enable"
-	MBetl_Disable_FullMethodName        = "/mbpb.MBetl/Disable"
-	MBetl_Run_FullMethodName            = "/mbpb.MBetl/Run"
-	MBetl_Cancel_FullMethodName         = "/mbpb.MBetl/Cancel"
-	MBetl_Remove_FullMethodName         = "/mbpb.MBetl/Remove"
-	MBetl_DataLineage_FullMethodName    = "/mbpb.MBetl/DataLineage"
-	MBetl_TaskflowUPsert_FullMethodName = "/mbpb.MBetl/TaskflowUPsert"
+	MBetl_Enable_FullMethodName            = "/mbpb.MBetl/Enable"
+	MBetl_Disable_FullMethodName           = "/mbpb.MBetl/Disable"
+	MBetl_Run_FullMethodName               = "/mbpb.MBetl/Run"
+	MBetl_Cancel_FullMethodName            = "/mbpb.MBetl/Cancel"
+	MBetl_Remove_FullMethodName            = "/mbpb.MBetl/Remove"
+	MBetl_DataLineage_FullMethodName       = "/mbpb.MBetl/DataLineage"
+	MBetl_TaskflowUPsert_FullMethodName    = "/mbpb.MBetl/TaskflowUPsert"
+	MBetl_GetTaskflowSpec_FullMethodName   = "/mbpb.MBetl/GetTaskflowSpec"
+	MBetl_GetTaskflowStatus_FullMethodName = "/mbpb.MBetl/GetTaskflowStatus"
 )
 
 // MBetlClient is the client API for MBetl service.
@@ -46,6 +48,10 @@ type MBetlClient interface {
 	DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Graph, error)
 	// 任务流更新
 	TaskflowUPsert(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error)
+	// 查询工作流定义
+	GetTaskflowSpec(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (*Graph, error)
+	// 查询工作流状态
+	GetTaskflowStatus(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (MBetl_GetTaskflowStatusClient, error)
 }
 
 type mBetlClient struct {
@@ -126,6 +132,49 @@ func (c *mBetlClient) TaskflowUPsert(ctx context.Context, in *TaskflowRequest, o
 	return out, nil
 }
 
+func (c *mBetlClient) GetTaskflowSpec(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (*Graph, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Graph)
+	err := c.cc.Invoke(ctx, MBetl_GetTaskflowSpec_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) GetTaskflowStatus(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (MBetl_GetTaskflowStatusClient, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MBetl_ServiceDesc.Streams[0], MBetl_GetTaskflowStatus_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &mBetlGetTaskflowStatusClient{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type MBetl_GetTaskflowStatusClient interface {
+	Recv() (*Graph, error)
+	grpc.ClientStream
+}
+
+type mBetlGetTaskflowStatusClient struct {
+	grpc.ClientStream
+}
+
+func (x *mBetlGetTaskflowStatusClient) Recv() (*Graph, error) {
+	m := new(Graph)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // MBetlServer is the server API for MBetl service.
 // All implementations must embed UnimplementedMBetlServer
 // for forward compatibility
@@ -144,6 +193,10 @@ type MBetlServer interface {
 	DataLineage(context.Context, *Request) (*Graph, error)
 	// 任务流更新
 	TaskflowUPsert(context.Context, *TaskflowRequest) (*Error, error)
+	// 查询工作流定义
+	GetTaskflowSpec(context.Context, *Identifier) (*Graph, error)
+	// 查询工作流状态
+	GetTaskflowStatus(*Identifier, MBetl_GetTaskflowStatusServer) error
 	mustEmbedUnimplementedMBetlServer()
 }
 
@@ -171,6 +224,12 @@ func (UnimplementedMBetlServer) DataLineage(context.Context, *Request) (*Graph, 
 }
 func (UnimplementedMBetlServer) TaskflowUPsert(context.Context, *TaskflowRequest) (*Error, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TaskflowUPsert not implemented")
+}
+func (UnimplementedMBetlServer) GetTaskflowSpec(context.Context, *Identifier) (*Graph, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskflowSpec not implemented")
+}
+func (UnimplementedMBetlServer) GetTaskflowStatus(*Identifier, MBetl_GetTaskflowStatusServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetTaskflowStatus not implemented")
 }
 func (UnimplementedMBetlServer) mustEmbedUnimplementedMBetlServer() {}
 
@@ -311,6 +370,45 @@ func _MBetl_TaskflowUPsert_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MBetl_GetTaskflowSpec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Identifier)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).GetTaskflowSpec(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_GetTaskflowSpec_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).GetTaskflowSpec(ctx, req.(*Identifier))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_GetTaskflowStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Identifier)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(MBetlServer).GetTaskflowStatus(m, &mBetlGetTaskflowStatusServer{ServerStream: stream})
+}
+
+type MBetl_GetTaskflowStatusServer interface {
+	Send(*Graph) error
+	grpc.ServerStream
+}
+
+type mBetlGetTaskflowStatusServer struct {
+	grpc.ServerStream
+}
+
+func (x *mBetlGetTaskflowStatusServer) Send(m *Graph) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // MBetl_ServiceDesc is the grpc.ServiceDesc for MBetl service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -346,7 +444,17 @@ var MBetl_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "TaskflowUPsert",
 			Handler:    _MBetl_TaskflowUPsert_Handler,
 		},
+		{
+			MethodName: "GetTaskflowSpec",
+			Handler:    _MBetl_GetTaskflowSpec_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetTaskflowStatus",
+			Handler:       _MBetl_GetTaskflowStatus_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "entrypoint.proto",
 }
