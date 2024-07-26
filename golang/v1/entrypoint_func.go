@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"mbetl/ecode"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -22,10 +21,25 @@ const (
 	CST8 = "Asia/Shanghai"
 )
 
-var (
-	TABLE_PREFIX string
-	TABLE_SUFFIX string
+const (
+	TABLE_PREFIX string = `__xfjwi__table`
+	TABLE_SUFFIX string = `0201`
 )
+
+func Hash(item ...interface{}) uint64 {
+
+	var arr []string
+	for _, val := range item {
+		arr = append(arr, fmt.Sprintf("%v", val))
+	}
+
+	key := strings.Join(arr, ".")
+	return xxhash.Sum64([]byte(key))
+}
+
+func HashString(item ...interface{}) string {
+	return strconv.FormatUint(Hash(item...), 10)
+}
 
 // 使用按位或设置状态
 func (s *RunStatus) Set(status RunStatus) {
@@ -100,14 +114,6 @@ func (r *EnableRequest) GetLocation() (*time.Location, error) {
 
 // 获取输出表
 func (r *EnableRequest) GetOutputTable() string {
-
-	if TABLE_PREFIX == "" {
-		TABLE_PREFIX = os.Getenv("MB_TABLE_PREFIX")
-	}
-
-	if TABLE_SUFFIX == "" {
-		TABLE_SUFFIX = os.Getenv("MB_TABLE_SUFFIX")
-	}
 
 	return strings.Join(
 		[]string{

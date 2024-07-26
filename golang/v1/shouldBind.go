@@ -68,6 +68,39 @@ func (req *Tables) Value() (driver.Value, error) {
 	return string(buff), nil
 }
 
+/*Depend*/
+
+type Depends []*Depend
+
+func (req *Depends) Scan(value interface{}) error {
+
+	if value == nil {
+		return nil
+	}
+
+	b, ok := value.([]byte)
+	if !ok {
+		return fmt.Errorf("value is not []byte, value: %v", value)
+	}
+
+	return sonic.Unmarshal(b, req)
+}
+
+func (req *Depends) Value() (driver.Value, error) {
+
+	if req == nil {
+		return nil, nil
+	}
+
+	buff, err := sonic.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	return string(buff), nil
+}
+
+/*Depend*/
+
 // DBDetail
 func (req *EnableRequest) Scan(value interface{}) error {
 

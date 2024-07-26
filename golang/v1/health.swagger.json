@@ -21,11 +21,12 @@
       "type": "string",
       "enum": [
         "Nothing",
-        "Join",
-        "Merge"
+        "NewFlow",
+        "AddFlow",
+        "MergeFlow"
       ],
       "default": "Nothing",
-      "title": "- Nothing: 无任何动作\n - Join: 加入指定的工作流\n - Merge: 合并工作流"
+      "title": "- Nothing: 无任何动作\n - NewFlow: 新建工作流\n - AddFlow: 加入工作流\n - MergeFlow: 合并工作流"
     },
     "mbpbAck": {
       "type": "object",
@@ -334,10 +335,6 @@
           "$ref": "#/definitions/mbpbTaskType",
           "title": "任务类型"
         },
-        "FlowExists": {
-          "type": "boolean",
-          "title": "任务流是否存在,存在提示加入,不存在提示新建"
-        },
         "BeforeFlow": {
           "type": "object",
           "additionalProperties": {
@@ -358,7 +355,12 @@
           "additionalProperties": {
             "$ref": "#/definitions/mbpbflowMap"
           },
-          "title": "工作id列表"
+          "title": "工作流ID映射"
+        },
+        "FlowID": {
+          "type": "string",
+          "format": "int64",
+          "title": "任务流ID"
         }
       },
       "title": "启用回复"
@@ -837,11 +839,10 @@
     "mbpbflowMap": {
       "type": "object",
       "properties": {
-        "cardId": {
-          "type": "string",
-          "format": "int64"
+        "UUID": {
+          "type": "string"
         },
-        "flowId": {
+        "flowID": {
           "type": "string",
           "format": "int64"
         }

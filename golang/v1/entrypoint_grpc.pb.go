@@ -25,7 +25,7 @@ const (
 	MBetl_Cancel_FullMethodName            = "/mbpb.MBetl/Cancel"
 	MBetl_Remove_FullMethodName            = "/mbpb.MBetl/Remove"
 	MBetl_DataLineage_FullMethodName       = "/mbpb.MBetl/DataLineage"
-	MBetl_TaskflowUPsert_FullMethodName    = "/mbpb.MBetl/TaskflowUPsert"
+	MBetl_TaskflowEnable_FullMethodName    = "/mbpb.MBetl/TaskflowEnable"
 	MBetl_GetTaskflowSpec_FullMethodName   = "/mbpb.MBetl/GetTaskflowSpec"
 	MBetl_GetTaskflowStatus_FullMethodName = "/mbpb.MBetl/GetTaskflowStatus"
 )
@@ -46,8 +46,8 @@ type MBetlClient interface {
 	Remove(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Error, error)
 	// 数据血亲
 	DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Graph, error)
-	// 任务流更新
-	TaskflowUPsert(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error)
+	// 任务流启用
+	TaskflowEnable(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error)
 	// 查询工作流定义
 	GetTaskflowSpec(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (*Graph, error)
 	// 查询工作流状态
@@ -122,10 +122,10 @@ func (c *mBetlClient) DataLineage(ctx context.Context, in *Request, opts ...grpc
 	return out, nil
 }
 
-func (c *mBetlClient) TaskflowUPsert(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error) {
+func (c *mBetlClient) TaskflowEnable(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Error)
-	err := c.cc.Invoke(ctx, MBetl_TaskflowUPsert_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, MBetl_TaskflowEnable_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -191,8 +191,8 @@ type MBetlServer interface {
 	Remove(context.Context, *Request) (*Error, error)
 	// 数据血亲
 	DataLineage(context.Context, *Request) (*Graph, error)
-	// 任务流更新
-	TaskflowUPsert(context.Context, *TaskflowRequest) (*Error, error)
+	// 任务流启用
+	TaskflowEnable(context.Context, *TaskflowRequest) (*Error, error)
 	// 查询工作流定义
 	GetTaskflowSpec(context.Context, *Identifier) (*Graph, error)
 	// 查询工作流状态
@@ -222,8 +222,8 @@ func (UnimplementedMBetlServer) Remove(context.Context, *Request) (*Error, error
 func (UnimplementedMBetlServer) DataLineage(context.Context, *Request) (*Graph, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DataLineage not implemented")
 }
-func (UnimplementedMBetlServer) TaskflowUPsert(context.Context, *TaskflowRequest) (*Error, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TaskflowUPsert not implemented")
+func (UnimplementedMBetlServer) TaskflowEnable(context.Context, *TaskflowRequest) (*Error, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TaskflowEnable not implemented")
 }
 func (UnimplementedMBetlServer) GetTaskflowSpec(context.Context, *Identifier) (*Graph, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTaskflowSpec not implemented")
@@ -352,20 +352,20 @@ func _MBetl_DataLineage_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MBetl_TaskflowUPsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _MBetl_TaskflowEnable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TaskflowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MBetlServer).TaskflowUPsert(ctx, in)
+		return srv.(MBetlServer).TaskflowEnable(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MBetl_TaskflowUPsert_FullMethodName,
+		FullMethod: MBetl_TaskflowEnable_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MBetlServer).TaskflowUPsert(ctx, req.(*TaskflowRequest))
+		return srv.(MBetlServer).TaskflowEnable(ctx, req.(*TaskflowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -441,8 +441,8 @@ var MBetl_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MBetl_DataLineage_Handler,
 		},
 		{
-			MethodName: "TaskflowUPsert",
-			Handler:    _MBetl_TaskflowUPsert_Handler,
+			MethodName: "TaskflowEnable",
+			Handler:    _MBetl_TaskflowEnable_Handler,
 		},
 		{
 			MethodName: "GetTaskflowSpec",
