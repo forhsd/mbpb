@@ -134,7 +134,7 @@ message flowMap {
 enum AcceptAction {
     Nothing = 0; // 无任何动作 
     NewFlow = 1; // 新建工作流
-    AddFlow = 2; // 加入工作流
+    AppendFlow = 2; // 追加工作流
     MergeFlow = 3; // 合并工作流
 }
 

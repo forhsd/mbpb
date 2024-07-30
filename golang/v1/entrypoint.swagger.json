@@ -167,11 +167,11 @@
       "enum": [
         "Nothing",
         "NewFlow",
-        "AddFlow",
+        "AppendFlow",
         "MergeFlow"
       ],
       "default": "Nothing",
-      "title": "- Nothing: 无任何动作\n - NewFlow: 新建工作流\n - AddFlow: 加入工作流\n - MergeFlow: 合并工作流"
+      "title": "- Nothing: 无任何动作\n - NewFlow: 新建工作流\n - AppendFlow: 追加工作流\n - MergeFlow: 合并工作流"
     },
     "mbpbColumn": {
       "type": "object",
