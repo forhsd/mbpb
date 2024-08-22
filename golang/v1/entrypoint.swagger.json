@@ -106,19 +106,11 @@
         },
         "parameters": [
           {
-            "name": "EnterpriseID",
-            "description": "企业ID",
+            "name": "ID",
             "in": "query",
             "required": false,
-            "type": "string"
-          },
-          {
-            "name": "CardId",
-            "description": "Card ID",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -140,19 +132,11 @@
         },
         "parameters": [
           {
-            "name": "EnterpriseID",
-            "description": "企业ID",
+            "name": "ID",
             "in": "query",
             "required": false,
-            "type": "string"
-          },
-          {
-            "name": "CardId",
-            "description": "Card ID",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "int64"
+            "type": "integer",
+            "format": "int32"
           }
         ],
         "tags": [
@@ -397,12 +381,10 @@
         },
         "Source": {
           "type": "string",
-          "format": "uint64",
           "title": "上游"
         },
         "Target": {
           "type": "string",
-          "format": "uint64",
           "title": "下游"
         }
       },
@@ -732,7 +714,6 @@
       "properties": {
         "Id": {
           "type": "string",
-          "format": "uint64",
           "title": "baseId+type hash BI不传"
         },
         "BaseId": {

@@ -297,12 +297,10 @@
         },
         "Source": {
           "type": "string",
-          "format": "uint64",
           "title": "上游"
         },
         "Target": {
           "type": "string",
-          "format": "uint64",
           "title": "下游"
         }
       },
@@ -722,7 +720,6 @@
       "properties": {
         "Id": {
           "type": "string",
-          "format": "uint64",
           "title": "baseId+type hash BI不传"
         },
         "BaseId": {

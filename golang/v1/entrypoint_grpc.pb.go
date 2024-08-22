@@ -49,9 +49,9 @@ type MBetlClient interface {
 	// 任务流启用
 	TaskflowEnable(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error)
 	// 查询工作流定义
-	GetTaskflowSpec(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (*Graph, error)
+	GetTaskflowSpec(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*Graph, error)
 	// 查询工作流状态
-	GetTaskflowStatus(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (MBetl_GetTaskflowStatusClient, error)
+	GetTaskflowStatus(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (MBetl_GetTaskflowStatusClient, error)
 }
 
 type mBetlClient struct {
@@ -132,7 +132,7 @@ func (c *mBetlClient) TaskflowEnable(ctx context.Context, in *TaskflowRequest, o
 	return out, nil
 }
 
-func (c *mBetlClient) GetTaskflowSpec(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (*Graph, error) {
+func (c *mBetlClient) GetTaskflowSpec(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*Graph, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Graph)
 	err := c.cc.Invoke(ctx, MBetl_GetTaskflowSpec_FullMethodName, in, out, cOpts...)
@@ -142,7 +142,7 @@ func (c *mBetlClient) GetTaskflowSpec(ctx context.Context, in *Identifier, opts 
 	return out, nil
 }
 
-func (c *mBetlClient) GetTaskflowStatus(ctx context.Context, in *Identifier, opts ...grpc.CallOption) (MBetl_GetTaskflowStatusClient, error) {
+func (c *mBetlClient) GetTaskflowStatus(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (MBetl_GetTaskflowStatusClient, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &MBetl_ServiceDesc.Streams[0], MBetl_GetTaskflowStatus_FullMethodName, cOpts...)
 	if err != nil {
@@ -194,9 +194,9 @@ type MBetlServer interface {
 	// 任务流启用
 	TaskflowEnable(context.Context, *TaskflowRequest) (*Error, error)
 	// 查询工作流定义
-	GetTaskflowSpec(context.Context, *Identifier) (*Graph, error)
+	GetTaskflowSpec(context.Context, *FlowRequest) (*Graph, error)
 	// 查询工作流状态
-	GetTaskflowStatus(*Identifier, MBetl_GetTaskflowStatusServer) error
+	GetTaskflowStatus(*FlowRequest, MBetl_GetTaskflowStatusServer) error
 	mustEmbedUnimplementedMBetlServer()
 }
 
@@ -225,10 +225,10 @@ func (UnimplementedMBetlServer) DataLineage(context.Context, *Request) (*Graph, 
 func (UnimplementedMBetlServer) TaskflowEnable(context.Context, *TaskflowRequest) (*Error, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TaskflowEnable not implemented")
 }
-func (UnimplementedMBetlServer) GetTaskflowSpec(context.Context, *Identifier) (*Graph, error) {
+func (UnimplementedMBetlServer) GetTaskflowSpec(context.Context, *FlowRequest) (*Graph, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTaskflowSpec not implemented")
 }
-func (UnimplementedMBetlServer) GetTaskflowStatus(*Identifier, MBetl_GetTaskflowStatusServer) error {
+func (UnimplementedMBetlServer) GetTaskflowStatus(*FlowRequest, MBetl_GetTaskflowStatusServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetTaskflowStatus not implemented")
 }
 func (UnimplementedMBetlServer) mustEmbedUnimplementedMBetlServer() {}
@@ -371,7 +371,7 @@ func _MBetl_TaskflowEnable_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _MBetl_GetTaskflowSpec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Identifier)
+	in := new(FlowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -383,13 +383,13 @@ func _MBetl_GetTaskflowSpec_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: MBetl_GetTaskflowSpec_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MBetlServer).GetTaskflowSpec(ctx, req.(*Identifier))
+		return srv.(MBetlServer).GetTaskflowSpec(ctx, req.(*FlowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _MBetl_GetTaskflowStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(Identifier)
+	m := new(FlowRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}

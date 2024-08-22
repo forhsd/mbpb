@@ -10,7 +10,6 @@ option java_outer_classname = "MBEtlpbProto";
 
 package mbpb;
 
-
 service MBLink {
     // 健康检查
     rpc Health(stream HealthRequest) returns (stream HealthReply) {}

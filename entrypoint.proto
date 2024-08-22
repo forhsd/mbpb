@@ -11,7 +11,6 @@ option java_outer_classname = "MBEtlpbProto";
 
 package mbpb;
 
-
 service MBetl {
 
     // 启用
@@ -41,7 +40,7 @@ service MBetl {
     rpc TaskflowEnable(TaskflowRequest)returns(Error){}
 
     // 查询工作流定义
-    rpc GetTaskflowSpec(Identifier)returns(Graph){
+    rpc GetTaskflowSpec(FlowRequest)returns(Graph){
         option (google.api.http) = {
             get: "/api/v1/flow/spec"
             // body: "*"
@@ -49,7 +48,7 @@ service MBetl {
     }
 
     // 查询工作流状态
-    rpc GetTaskflowStatus(Identifier)returns(stream Graph){
+    rpc GetTaskflowStatus(FlowRequest)returns(stream Graph){
         option (google.api.http) = {
             get: "/api/v1/flow/status"
             // body: "*"
@@ -59,6 +58,11 @@ service MBetl {
     // 单向流
     // rpc CallBack(stream CallBackRequest)returns(Error){}
     
+}
+
+// 任务流查询请求结构
+message FlowRequest{
+    int32 ID = 1;
 }
 
 message WorkflowReply {
@@ -80,7 +84,8 @@ message TaskflowRequest {
     int64 FlowID = 1; // 任务流ID
     Crontab Crontab = 2; //运行周期表达式,不能为空
     AcceptAction AcceptAction = 3; // 接受动作
-    map<uint64,flowMap> flowMap = 4; // 工作流ID映射
+    map<string,flowMap> flowMap = 4; // 工作流ID映射
+    map<int64,Graph> BeforeFlow = 5; // 流程图 key代表现有工作流ID
 }
 
 // 启用请求
@@ -121,7 +126,7 @@ message EnableReply {
     // 确认动作,点击是或否后的动作
     AcceptAction AcceptAction = 8;
     // 工作流ID映射
-    map<uint64,flowMap> flowMap = 9;
+    map<string,flowMap> flowMap = 9;
     // 任务流ID
     int64 FlowID = 10;
 }
@@ -192,16 +197,16 @@ enum SourceType {
 // 边缘
 message Edge {
     string Id = 1; // 唯一键
-    uint64 Source = 2; // 上游
-    uint64 Target = 3; // 下游
+    string Source = 2; // 上游
+    string Target = 3; // 下游
 }
 
 // 来源
 message Source {
-    uint64 Id = 1; // baseId+type hash BI不传
+    string Id = 1; // baseId+type hash BI不传
     string BaseId = 2; // 原始唯一键
     SourceType Type = 3; // 类型
-    map<uint64, Property> Prev = 4; // 上级 BI不传
+    map<string, Property> Prev = 4; // 上级 BI不传
 }
 
 message Property {
@@ -221,6 +226,7 @@ message Depend {
     Source Source = 1; // 来源
     Source Target = 2; // 目标 
 }
+
 
 // 字段类
 message Column {
@@ -372,7 +378,6 @@ message CycleHour {
     repeated int32 Hour = 1; // 小时 切片
     repeated int32 Minute = 2; // 分钟 切片
 }
-
 
 // 周期类型
 enum EveryTimeType {

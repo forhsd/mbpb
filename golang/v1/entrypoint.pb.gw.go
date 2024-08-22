@@ -72,7 +72,7 @@ var (
 )
 
 func request_MBetl_GetTaskflowSpec_0(ctx context.Context, marshaler runtime.Marshaler, client MBetlClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Identifier
+	var protoReq FlowRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
@@ -88,7 +88,7 @@ func request_MBetl_GetTaskflowSpec_0(ctx context.Context, marshaler runtime.Mars
 }
 
 func local_request_MBetl_GetTaskflowSpec_0(ctx context.Context, marshaler runtime.Marshaler, server MBetlServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Identifier
+	var protoReq FlowRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
@@ -108,7 +108,7 @@ var (
 )
 
 func request_MBetl_GetTaskflowStatus_0(ctx context.Context, marshaler runtime.Marshaler, client MBetlClient, req *http.Request, pathParams map[string]string) (MBetl_GetTaskflowStatusClient, runtime.ServerMetadata, error) {
-	var protoReq Identifier
+	var protoReq FlowRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {

@@ -140,6 +140,19 @@ func (r *Request) Validate() error {
 	return nil
 }
 
+func (req *TaskflowRequest) Validate() error {
+
+	if req.FlowID == 0 {
+		return errors.New("flowID不能为空")
+	}
+
+	if req.FlowMap == nil || len(req.FlowMap) == 0 {
+		return errors.New("flowMAP不能为空")
+	}
+
+	return nil
+}
+
 // 验证
 func (r *EnableRequest) Validate() error {
 
@@ -268,7 +281,7 @@ func (j *Overview) GormDataType() string {
 }
 
 type Node struct {
-	ID       uint64  `json:"id"`
+	ID       string  `json:"id"`
 	Children []*Node `json:"children,omitempty"`
 	Edges    []*Edge `json:"edges,omitempty"`
 	X        int     `json:"x,omitempty"`
@@ -285,7 +298,7 @@ type Label struct {
 // 血亲
 func Relatives(work *flow.Workflow) *Node {
 
-	root := &Node{ID: 0}
+	root := &Node{ID: "0"}
 	nodes := map[flow.Steper]*Node{
 		work: root,
 	}
@@ -294,8 +307,8 @@ func Relatives(work *flow.Workflow) *Node {
 		if !ok {
 			// node = &Node{ID: uuid.NewString()}
 			t := flow.String(s)
-			id, _ := strconv.ParseUint(t, 10, 64)
-			node = &Node{ID: id}
+			// id, _ := strconv.ParseUint(t, 10, 64)
+			node = &Node{ID: t}
 			nodes[s] = node
 		}
 		return node
