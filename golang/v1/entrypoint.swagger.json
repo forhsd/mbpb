@@ -693,6 +693,10 @@
           },
           "title": "字段类"
         },
+        "NextRunTime": {
+          "type": "string",
+          "title": "下次运行时间 可选"
+        },
         "Error": {
           "$ref": "#/definitions/mbpbError",
           "title": "错误信息 可选"

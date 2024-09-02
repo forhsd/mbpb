@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option optimize_for = SPEED;
+
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 // import "validate/validate.proto";
@@ -175,7 +177,8 @@ message Reply {
     optional string Key = 1; // Key
     optional string SequenceID = 2; // 序列ID
     repeated Column Columns = 3; // 字段类
-    optional Error Error = 4; // 错误信息 可选
+    optional string NextRunTime = 4; // 下次运行时间 可选
+    optional Error Error = 5; // 错误信息 可选
 }
 
 message Graph {
