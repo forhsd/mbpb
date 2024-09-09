@@ -4,7 +4,7 @@ import (
 	"database/sql/driver"
 	"fmt"
 
-	"github.com/bytedance/sonic"
+	"github.com/forhsd/sonic"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 

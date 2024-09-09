@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bytedance/sonic"
 	"github.com/cespare/xxhash/v2"
 	flow "github.com/forhsd/go-workflow"
+	"github.com/forhsd/sonic"
 	"github.com/google/uuid"
 )
 
