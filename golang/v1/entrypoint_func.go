@@ -5,15 +5,13 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
-	"mbetl/ecode"
 	"strconv"
 	"strings"
 	"time"
 
-	"github.com/cespare/xxhash/v2"
 	flow "github.com/forhsd/go-workflow"
-	"github.com/forhsd/sonic"
 	"github.com/google/uuid"
+	"google.golang.org/grpc/status"
 )
 
 const (
@@ -26,6 +24,21 @@ const (
 	TABLE_SUFFIX string = `0201`
 )
 
+var (
+	plug Plugin
+)
+
+func RegisterPlugin(tool Plugin) {
+	plug = tool
+}
+
+type Plugin interface {
+	Sum64(b []byte) uint64                       // xxhash.Sum64
+	Marshal(val interface{}) ([]byte, error)     // sonic.Marshal
+	Unmarshal(buf []byte, val interface{}) error // sonic.Unmarshal
+	FromContextError(err error) *status.Status   // ecode.FromContextError
+}
+
 func Hash(item ...interface{}) uint64 {
 
 	var arr []string
@@ -34,7 +47,7 @@ func Hash(item ...interface{}) uint64 {
 	}
 
 	key := strings.Join(arr, ".")
-	return xxhash.Sum64([]byte(key))
+	return plug.Sum64([]byte(key))
 }
 
 func HashString(item ...interface{}) string {
@@ -59,14 +72,14 @@ func (s RunStatus) Has(status RunStatus) bool {
 
 func (r *Request) GetUniqueId() *string {
 	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
-	hash := xxhash.Sum64([]byte(key))
+	hash := plug.Sum64([]byte(key))
 	hashsrt := strconv.FormatUint(hash, 10)
 	return &hashsrt
 }
 
 func (r *EnableRequest) Hash() string {
 	key := fmt.Sprintf("%v.%v", r.GetEnterpriseID(), r.GetCardId())
-	hash := xxhash.Sum64([]byte(key))
+	hash := plug.Sum64([]byte(key))
 	return strconv.FormatUint(hash, 10)
 }
 
@@ -75,7 +88,7 @@ func (r *EnableRequest) SequenceID(runRime *time.Time) string {
 		runRime = &time.Time{}
 	}
 	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), runRime.UnixNano())
-	hash := xxhash.Sum64([]byte(key))
+	hash := plug.Sum64([]byte(key))
 	return strconv.FormatUint(hash, 10)
 }
 
@@ -84,7 +97,7 @@ func (r *Request) SequenceID(runRime *time.Time) string {
 		runRime = &time.Time{}
 	}
 	key := fmt.Sprintf("%v.%v.%v", r.GetEnterpriseID(), r.GetCardId(), runRime.UnixNano())
-	hash := xxhash.Sum64([]byte(key))
+	hash := plug.Sum64([]byte(key))
 	return strconv.FormatUint(hash, 10)
 }
 
@@ -219,14 +232,14 @@ func (x *Overview) GetErrorEnding(ctx context.Context, err error) {
 		x.Detail.Error = &Error{}
 	}
 
-	errs := ecode.FromContextError(err)
+	errs := plug.FromContextError(err)
 
 	// 用户取消或失败
 	if ctx.Err() == context.Canceled {
 		x.RunStatus = RunStatus_Cancel
 
 		if x.Detail.Error.Code == 0 {
-			x.Detail.Error.Code = int32(ecode.UserCancellation)
+			x.Detail.Error.Code = int32(4000023) // ecode.UserCancellation
 		}
 		if x.Detail.Error.Msg == "" {
 			x.Detail.Error.Msg = ctx.Err().Error()
@@ -247,7 +260,7 @@ func (x *Overview) GetErrorEnding(ctx context.Context, err error) {
 // Value 实现了gorm.Type接口，用于获取存储的值
 func (o *Overview) Value() (driver.Value, error) {
 
-	bytes, err := sonic.Marshal(o)
+	bytes, err := plug.Marshal(o)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +280,7 @@ func (o *Overview) Scan(value interface{}) error {
 		return errors.New("invalid type for JSONBType")
 	}
 
-	err := sonic.Unmarshal(bytes, o)
+	err := plug.Unmarshal(bytes, o)
 	if err != nil {
 		return err
 	}

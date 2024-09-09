@@ -4,7 +4,6 @@ import (
 	"database/sql/driver"
 	"fmt"
 
-	"github.com/forhsd/sonic"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -52,7 +51,7 @@ func (req *Tables) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, req)
+	return plug.Unmarshal(b, req)
 }
 
 func (req *Tables) Value() (driver.Value, error) {
@@ -61,7 +60,7 @@ func (req *Tables) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	buff, err := sonic.Marshal(req)
+	buff, err := plug.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +82,7 @@ func (req *Depends) Scan(value interface{}) error {
 		return fmt.Errorf("value is not []byte, value: %v", value)
 	}
 
-	return sonic.Unmarshal(b, req)
+	return plug.Unmarshal(b, req)
 }
 
 func (req *Depends) Value() (driver.Value, error) {
@@ -92,7 +91,7 @@ func (req *Depends) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	buff, err := sonic.Marshal(req)
+	buff, err := plug.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +143,7 @@ func (db *DBDetail) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, db)
+	return plug.Unmarshal(b, db)
 }
 
 // Value Valuer
@@ -154,7 +153,7 @@ func (db *DBDetail) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	buff, err := sonic.Marshal(db)
+	buff, err := plug.Marshal(db)
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +198,7 @@ func (db *Crontab) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, db)
+	return plug.Unmarshal(b, db)
 }
 
 // Value Valuer
@@ -209,7 +208,7 @@ func (db *Crontab) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	buff, err := sonic.Marshal(db)
+	buff, err := plug.Marshal(db)
 	if err != nil {
 		return nil, err
 	}
@@ -228,7 +227,7 @@ func (db *Extra) Scan(value interface{}) error {
 	}
 
 	// return json.Unmarshal(b, &db)
-	return sonic.Unmarshal(b, db)
+	return plug.Unmarshal(b, db)
 }
 
 // Value Valuer
@@ -238,7 +237,7 @@ func (db *Extra) Value() (driver.Value, error) {
 		return nil, nil
 	}
 
-	buff, err := sonic.Marshal(db)
+	buff, err := plug.Marshal(db)
 	if err != nil {
 		return nil, err
 	}
