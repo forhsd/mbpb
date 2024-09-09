@@ -695,7 +695,7 @@
         },
         "NextRunTime": {
           "type": "string",
-          "title": "下次运行时间 可选"
+          "title": "下次运行时间 可选 手动运行需要"
         },
         "Error": {
           "$ref": "#/definitions/mbpbError",

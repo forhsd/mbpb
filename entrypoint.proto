@@ -177,7 +177,7 @@ message Reply {
     optional string Key = 1; // Key
     optional string SequenceID = 2; // 序列ID
     repeated Column Columns = 3; // 字段类
-    optional string NextRunTime = 4; // 下次运行时间 可选
+    optional string NextRunTime = 4; // 下次运行时间 可选 手动运行需要
     optional Error Error = 5; // 错误信息 可选
 }
 
@@ -246,6 +246,7 @@ enum RunStatus {
     Success = 16; // 运行成功
     Fail = 32; // 运行失败
     Cancel = 64; // 已取消
+    Skip = 128; // 跳过
 }
 
 // 数据库信息
