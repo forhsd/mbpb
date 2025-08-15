@@ -17,6 +17,25 @@
   ],
   "paths": {},
   "definitions": {
+    "googlerpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
     "mbpbAcceptAction": {
       "type": "string",
       "enum": [
@@ -31,16 +50,16 @@
     "mbpbAck": {
       "type": "object",
       "properties": {
-        "Key": {
+        "key": {
           "type": "string"
         },
-        "SequenceID": {
+        "sequenceID": {
           "type": "string"
         },
-        "Error": {
+        "error": {
           "$ref": "#/definitions/mbpbError"
         },
-        "Now": {
+        "now": {
           "type": "string",
           "format": "date-time"
         }
@@ -49,11 +68,27 @@
     "mbpbColumn": {
       "type": "object",
       "properties": {
-        "Name": {
+        "name": {
           "type": "string"
         },
-        "Type": {
+        "type": {
           "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "primary_key": {
+          "type": "boolean"
+        },
+        "not_null": {
+          "type": "boolean"
+        },
+        "unique": {
+          "type": "boolean"
+        },
+        "type_modifier": {
+          "type": "integer",
+          "format": "int32"
         }
       },
       "title": "字段类"
@@ -61,23 +96,23 @@
     "mbpbCrontab": {
       "type": "object",
       "properties": {
-        "Enable": {
+        "enable": {
           "type": "boolean",
           "title": "调度状态"
         },
-        "LifeCycle": {
+        "lifeCycle": {
           "$ref": "#/definitions/mbpbLifeCycle",
           "title": "生命周期"
         },
-        "CycleOnce": {
+        "cycleOnce": {
           "$ref": "#/definitions/mbpbCycleOnce",
           "title": "只执行1次"
         },
-        "CycleEvery": {
+        "cycleEvery": {
           "$ref": "#/definitions/mbpbCycleEvery",
           "title": "每隔多久执行一次"
         },
-        "CycleEveryTime": {
+        "cycleEveryTime": {
           "$ref": "#/definitions/mbpbCycleEveryTime",
           "title": "时间循环周期执行"
         }
@@ -87,13 +122,13 @@
     "mbpbCycleEvery": {
       "type": "object",
       "properties": {
-        "EveryExpress": {
+        "everyExpress": {
           "$ref": "#/definitions/mbpbEveryExpress",
           "title": "间隔周期"
         },
-        "Expression": {
+        "expression": {
           "$ref": "#/definitions/mbpbExpression",
-          "title": "表达式"
+          "title": "表达式 Expression己弃用,应使用EveryExpress"
         }
       },
       "title": "间隔时间执行"
@@ -105,7 +140,7 @@
     "mbpbCycleEveryMonth": {
       "type": "object",
       "properties": {
-        "Day": {
+        "day": {
           "type": "array",
           "items": {
             "type": "integer",
@@ -119,7 +154,7 @@
     "mbpbCycleEveryQuarter": {
       "type": "object",
       "properties": {
-        "Month": {
+        "month": {
           "type": "array",
           "items": {
             "type": "object",
@@ -133,31 +168,31 @@
     "mbpbCycleEveryTime": {
       "type": "object",
       "properties": {
-        "EveryType": {
+        "everyType": {
           "$ref": "#/definitions/mbpbEveryTimeType",
           "title": "类型"
         },
-        "RunTime": {
+        "runTime": {
           "$ref": "#/definitions/mbpbCycleHour",
           "title": "运行时间"
         },
-        "EveryDay": {
+        "everyDay": {
           "$ref": "#/definitions/mbpbCycleEveryDay",
           "title": "每天"
         },
-        "EveryWeek": {
+        "everyWeek": {
           "$ref": "#/definitions/mbpbCycleEveryWeek",
           "title": "每周"
         },
-        "EveryMonth": {
+        "everyMonth": {
           "$ref": "#/definitions/mbpbCycleEveryMonth",
           "title": "每月"
         },
-        "EveryQuarter": {
+        "everyQuarter": {
           "$ref": "#/definitions/mbpbCycleEveryQuarter",
           "title": "每季"
         },
-        "EveryYear": {
+        "everyYear": {
           "$ref": "#/definitions/mbpbCycleEveryYear",
           "title": "每年"
         }
@@ -167,7 +202,7 @@
     "mbpbCycleEveryWeek": {
       "type": "object",
       "properties": {
-        "Week": {
+        "week": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/mbpbEnumWeek"
@@ -180,7 +215,7 @@
     "mbpbCycleEveryYear": {
       "type": "object",
       "properties": {
-        "Month": {
+        "month": {
           "type": "array",
           "items": {
             "type": "object",
@@ -194,7 +229,7 @@
     "mbpbCycleHour": {
       "type": "object",
       "properties": {
-        "Hour": {
+        "hour": {
           "type": "array",
           "items": {
             "type": "integer",
@@ -202,7 +237,7 @@
           },
           "title": "小时 切片"
         },
-        "Minute": {
+        "minute": {
           "type": "array",
           "items": {
             "type": "integer",
@@ -216,9 +251,9 @@
     "mbpbCycleOnce": {
       "type": "object",
       "properties": {
-        "Expression": {
+        "expression": {
           "$ref": "#/definitions/mbpbExpression",
-          "title": "表达式"
+          "title": "表达式 Expression应置空"
         }
       },
       "title": "执行一次"
@@ -226,50 +261,42 @@
     "mbpbDBDetail": {
       "type": "object",
       "properties": {
-        "DBType": {
-          "type": "string",
-          "title": "数据库类型"
+        "db_type": {
+          "$ref": "#/definitions/mbpbDBType",
+          "title": "engine 引擎"
         },
-        "Host": {
-          "type": "string",
-          "title": "数据主机地址"
+        "postgres": {
+          "$ref": "#/definitions/mbpbGenericDB"
         },
-        "Port": {
-          "type": "integer",
-          "format": "int32",
-          "title": "数据库端口"
+        "doris": {
+          "$ref": "#/definitions/mbpbDoris"
         },
-        "User": {
-          "type": "string",
-          "title": "数据库用户名"
-        },
-        "Pwd": {
-          "type": "string",
-          "title": "数据库密码"
-        },
-        "DBName": {
-          "type": "string",
-          "title": "数据库名称"
-        },
-        "ConnectParams": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "string"
-          },
-          "title": "连接参数"
+        "mysql": {
+          "$ref": "#/definitions/mbpbGenericDB"
         }
       },
       "title": "数据库信息"
     },
+    "mbpbDBType": {
+      "type": "string",
+      "enum": [
+        "UNSPECIFIED",
+        "POSTGRES",
+        "DORIS",
+        "MYSQL"
+      ],
+      "default": "UNSPECIFIED",
+      "title": "- UNSPECIFIED: 未定义\n - POSTGRES: postgres\n - DORIS: doris\n - MYSQL: mysql"
+    },
     "mbpbDetail": {
       "type": "object",
       "properties": {
-        "RowsCount": {
+        "rowsCount": {
           "type": "string",
           "format": "int64",
           "title": "行数"
         },
-        "Columns": {
+        "columns": {
           "type": "array",
           "items": {
             "type": "object",
@@ -277,29 +304,80 @@
           },
           "title": "字段类"
         },
-        "OutTable": {
+        "outTable": {
           "$ref": "#/definitions/mbpbTable",
           "title": "实体表"
         },
-        "Error": {
-          "$ref": "#/definitions/mbpbError",
-          "title": "错误明细"
+        "startTime": {
+          "type": "string",
+          "title": "开始运行时间 精确到纳秒"
+        },
+        "endTime": {
+          "type": "string",
+          "title": "结束运行时间 精确到纳秒"
+        },
+        "sequenceId": {
+          "type": "string",
+          "title": "节点sequenceId"
         }
       },
       "title": "详情"
     },
+    "mbpbDoris": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "title": "数据主机地址"
+        },
+        "http_port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "http协议端口 例如: 8030"
+        },
+        "query_port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "sql协议端口 例如: 9030"
+        },
+        "flight_port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Flight SQL端口 例如: 9090"
+        },
+        "user": {
+          "type": "string",
+          "title": "数据库用户名"
+        },
+        "pwd": {
+          "type": "string",
+          "title": "数据库密码"
+        },
+        "db_name": {
+          "type": "string",
+          "title": "数据库名称"
+        },
+        "connect_params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "连接参数"
+        }
+      }
+    },
     "mbpbEdge": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "唯一键"
         },
-        "Source": {
+        "source": {
           "type": "string",
           "title": "上游"
         },
-        "Target": {
+        "target": {
           "type": "string",
           "title": "下游"
         }
@@ -309,11 +387,11 @@
     "mbpbEnableReply": {
       "type": "object",
       "properties": {
-        "OutTable": {
+        "outTable": {
           "$ref": "#/definitions/mbpbTable",
           "title": "结果表"
         },
-        "Columns": {
+        "columns": {
           "type": "array",
           "items": {
             "type": "object",
@@ -321,44 +399,17 @@
           },
           "title": "字段类"
         },
-        "NextRunTime": {
+        "nextRunTime": {
           "type": "string",
           "title": "下次运行时间"
         },
-        "Error": {
+        "error": {
           "$ref": "#/definitions/mbpbError",
           "title": "错误信息 可选"
         },
-        "TaskType": {
-          "$ref": "#/definitions/mbpbTaskType",
-          "title": "任务类型"
-        },
-        "BeforeFlow": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/mbpbGraph"
-          },
-          "title": "流程图 key代表现有工作流ID\ntodo可能存在多个任务流,map 工作流ID"
-        },
-        "AfterFlow": {
-          "$ref": "#/definitions/mbpbGraph",
-          "title": "合并后、或加入后的工作流"
-        },
-        "AcceptAction": {
-          "$ref": "#/definitions/mbpbAcceptAction",
-          "title": "确认动作,点击是或否后的动作"
-        },
-        "flowMap": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/mbpbflowMap"
-          },
-          "title": "工作流ID映射"
-        },
-        "FlowID": {
-          "type": "string",
-          "format": "int64",
-          "title": "任务流ID"
+        "flowData": {
+          "$ref": "#/definitions/mbpbFlowMetadata",
+          "title": "工作流元数据"
         }
       },
       "title": "启用回复"
@@ -366,33 +417,37 @@
     "mbpbEnableRequest": {
       "type": "object",
       "properties": {
-        "DBInfo": {
+        "source_db": {
           "$ref": "#/definitions/mbpbDBDetail",
-          "title": "数据库信息"
+          "title": "源数据库"
         },
-        "EnterpriseID": {
+        "target_db": {
+          "$ref": "#/definitions/mbpbDBDetail",
+          "title": "目标数据库"
+        },
+        "enterprise_id": {
           "type": "string",
           "title": "企业ID"
         },
-        "CardId": {
+        "card_id": {
           "type": "string",
           "format": "int64",
           "title": "Card ID"
         },
-        "UserId": {
+        "user_id": {
           "type": "string",
           "format": "int64",
           "title": "创建人"
         },
-        "Crontab": {
+        "crontab": {
           "$ref": "#/definitions/mbpbCrontab",
           "title": "运行周期表达式"
         },
-        "SqlScript": {
+        "sql_script": {
           "type": "string",
           "title": "SQL代码"
         },
-        "Tables": {
+        "tables": {
           "type": "array",
           "items": {
             "type": "object",
@@ -400,13 +455,25 @@
           },
           "title": "SQL引用的实体表"
         },
-        "Extra": {
+        "extra": {
           "$ref": "#/definitions/mbpbExtra",
           "title": "附加信息"
         },
-        "Over": {
+        "over": {
           "$ref": "#/definitions/mbpbOver",
           "title": "BI不传"
+        },
+        "skip_workflow": {
+          "type": "boolean",
+          "title": "跳过工作流"
+        },
+        "all_tables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/mbpbTable"
+          },
+          "title": "所有实体表 BI不传"
         }
       },
       "title": "启用请求"
@@ -449,12 +516,12 @@
     "mbpbError": {
       "type": "object",
       "properties": {
-        "Code": {
+        "code": {
           "type": "integer",
           "format": "int32",
           "title": "错误码"
         },
-        "Msg": {
+        "msg": {
           "type": "string",
           "title": "错误信息"
         }
@@ -464,11 +531,11 @@
     "mbpbEveryExpress": {
       "type": "object",
       "properties": {
-        "CycleType": {
+        "cycleType": {
           "$ref": "#/definitions/mbpbEveryType",
           "title": "类型"
         },
-        "CycleValue": {
+        "cycleValue": {
           "type": "integer",
           "format": "int32",
           "title": "Value"
@@ -507,7 +574,7 @@
     "mbpbExpression": {
       "type": "object",
       "properties": {
-        "Express": {
+        "express": {
           "type": "string",
           "title": "表达式"
         }
@@ -517,7 +584,7 @@
     "mbpbExtra": {
       "type": "object",
       "properties": {
-        "Grouping": {
+        "grouping": {
           "type": "array",
           "items": {
             "type": "object",
@@ -525,7 +592,7 @@
           },
           "title": "分组信息"
         },
-        "Selects": {
+        "selects": {
           "type": "array",
           "items": {
             "type": "object",
@@ -539,26 +606,108 @@
     "mbpbFQN": {
       "type": "object",
       "properties": {
-        "Schema": {
+        "schema": {
           "type": "string"
         },
-        "Table": {
+        "table": {
           "type": "string"
         },
-        "Column": {
+        "column": {
           "type": "string"
         }
       },
       "title": "Fully Qualified Name"
     },
+    "mbpbFlowMap": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "flowID": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "mbpbFlowMetadata": {
+      "type": "object",
+      "properties": {
+        "taskType": {
+          "$ref": "#/definitions/mbpbTaskType",
+          "title": "任务类型"
+        },
+        "beforeFlow": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/mbpbGraph"
+          },
+          "title": "流程图 key代表现有工作流ID\n2do可能存在多个任务流,map 工作流ID"
+        },
+        "afterFlow": {
+          "$ref": "#/definitions/mbpbGraph",
+          "title": "合并后、或加入后的工作流"
+        },
+        "acceptAction": {
+          "$ref": "#/definitions/mbpbAcceptAction",
+          "title": "确认动作,点击是或否后的动作"
+        },
+        "flowMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/mbpbFlowMap"
+          },
+          "title": "工作流ID映射"
+        },
+        "flowID": {
+          "type": "string",
+          "format": "int64",
+          "title": "任务流ID"
+        }
+      },
+      "title": "工作流元数据"
+    },
+    "mbpbGenericDB": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "string",
+          "title": "数据主机地址"
+        },
+        "port": {
+          "type": "integer",
+          "format": "int32",
+          "title": "数据库端口"
+        },
+        "user": {
+          "type": "string",
+          "title": "数据库用户名"
+        },
+        "pwd": {
+          "type": "string",
+          "title": "数据库密码"
+        },
+        "db_name": {
+          "type": "string",
+          "title": "数据库名称"
+        },
+        "connect_params": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "连接参数"
+        }
+      }
+    },
     "mbpbGraph": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "id"
         },
-        "Children": {
+        "children": {
           "type": "array",
           "items": {
             "type": "object",
@@ -566,7 +715,7 @@
           },
           "title": "节点"
         },
-        "Edges": {
+        "edges": {
           "type": "array",
           "items": {
             "type": "object",
@@ -574,7 +723,7 @@
           },
           "title": "边缘"
         },
-        "Error": {
+        "error": {
           "$ref": "#/definitions/mbpbError",
           "title": "错误信息"
         }
@@ -583,7 +732,7 @@
     "mbpbHealthReply": {
       "type": "object",
       "properties": {
-        "Healthy": {
+        "healthy": {
           "type": "boolean"
         }
       }
@@ -591,56 +740,104 @@
     "mbpbLifeCycle": {
       "type": "object",
       "properties": {
-        "Zone": {
+        "zone": {
           "type": "string",
           "title": "时区"
         },
-        "StartTime": {
+        "startTime": {
           "type": "string",
           "title": "执行时间"
         },
-        "EndTime": {
+        "endTime": {
           "type": "string",
           "title": "结束时间 无限期为null"
         }
       },
       "title": "生命周期"
     },
+    "mbpbNodeDetail": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "enterpriseID": {
+          "type": "string"
+        },
+        "cardId": {
+          "type": "string",
+          "format": "int64",
+          "title": "cardId"
+        },
+        "sequenceID": {
+          "type": "string"
+        },
+        "detail": {
+          "$ref": "#/definitions/mbpbDetail",
+          "title": "card detail"
+        },
+        "runStatus": {
+          "$ref": "#/definitions/mbpbRunStatus"
+        },
+        "target_db": {
+          "$ref": "#/definitions/mbpbDBDetail"
+        },
+        "error": {
+          "$ref": "#/definitions/mbpbError"
+        }
+      }
+    },
     "mbpbOver": {
       "type": "object",
       "properties": {
-        "Hash": {
+        "uid": {
           "type": "string",
-          "title": "Hash"
+          "title": "uid"
         },
-        "SequenceID": {
+        "sequenceID": {
           "type": "string",
           "title": "SequenceID"
         },
-        "RunType": {
+        "runType": {
           "$ref": "#/definitions/mbpbRunType",
           "title": "运行类型"
         },
-        "StartRunTime": {
+        "startRunTime": {
           "type": "string",
           "format": "date-time",
           "title": "开始运行时间"
         },
-        "NextRunTime": {
+        "nextRunTime": {
           "type": "string",
           "format": "date-time",
           "title": "下次运行时间"
+        },
+        "taskType": {
+          "$ref": "#/definitions/mbpbTaskType",
+          "title": "任务类型"
+        },
+        "flowSequenceID": {
+          "type": "string",
+          "title": "工作流唯一标识"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/mbpbSource"
+          },
+          "title": "工作流节点"
         }
       }
     },
     "mbpbProperty": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "原始唯一键"
         },
-        "Type": {
+        "type": {
           "$ref": "#/definitions/mbpbSourceType",
           "title": "类型"
         }
@@ -649,15 +846,15 @@
     "mbpbReply": {
       "type": "object",
       "properties": {
-        "Key": {
+        "key": {
           "type": "string",
           "title": "Key"
         },
-        "SequenceID": {
+        "sequenceID": {
           "type": "string",
           "title": "序列ID"
         },
-        "Columns": {
+        "columns": {
           "type": "array",
           "items": {
             "type": "object",
@@ -665,30 +862,30 @@
           },
           "title": "字段类"
         },
-        "NextRunTime": {
+        "nextRunTime": {
           "type": "string",
           "title": "下次运行时间 可选 手动运行需要"
         },
-        "Error": {
+        "error": {
           "$ref": "#/definitions/mbpbError",
           "title": "错误信息 可选"
         }
       },
-      "title": "行动回复"
+      "title": "运行响应"
     },
     "mbpbRequest": {
       "type": "object",
       "properties": {
-        "EnterpriseID": {
+        "enterpriseID": {
           "type": "string",
           "title": "企业ID"
         },
-        "CardId": {
+        "cardId": {
           "type": "string",
           "format": "int64",
           "title": "int64 CardId = 2 [(validate.rules).int64.gte = 1]; // Card ID"
         },
-        "Over": {
+        "over": {
           "$ref": "#/definitions/mbpbOver",
           "title": "BI不传"
         }
@@ -723,24 +920,28 @@
     "mbpbSource": {
       "type": "object",
       "properties": {
-        "Id": {
+        "id": {
           "type": "string",
           "title": "baseId+type hash BI不传"
         },
-        "BaseId": {
+        "baseId": {
           "type": "string",
           "title": "原始唯一键"
         },
-        "Type": {
+        "type": {
           "$ref": "#/definitions/mbpbSourceType",
           "title": "类型"
         },
-        "Prev": {
+        "prev": {
           "type": "object",
           "additionalProperties": {
             "$ref": "#/definitions/mbpbProperty"
           },
           "title": "上级 BI不传"
+        },
+        "runStatus": {
+          "$ref": "#/definitions/mbpbRunStatus",
+          "title": "运行状态 BI不传"
         }
       },
       "title": "来源"
@@ -761,19 +962,19 @@
     "mbpbTable": {
       "type": "object",
       "properties": {
-        "Schema": {
+        "schema": {
           "type": "string",
           "title": "schema"
         },
-        "Table": {
+        "table": {
           "type": "string",
           "title": "table"
         },
-        "Source": {
+        "source": {
           "$ref": "#/definitions/mbpbSource",
           "title": "来源"
         },
-        "Target": {
+        "target": {
           "$ref": "#/definitions/mbpbSource",
           "title": "目标 BI不传"
         }
@@ -783,21 +984,22 @@
     "mbpbTaskType": {
       "type": "string",
       "enum": [
-        "basicTask",
-        "flowTask"
+        "BasicTask",
+        "FlowTask",
+        "WebhookTask"
       ],
-      "default": "basicTask",
-      "description": "- basicTask: 基本任务\n - flowTask: 工作流",
+      "default": "BasicTask",
+      "description": "- BasicTask: 基本任务\n - FlowTask: 工作流\n - WebhookTask: 钩子任务",
       "title": "任务类型"
     },
     "mbpbWithMonth": {
       "type": "object",
       "properties": {
-        "Month": {
+        "month": {
           "$ref": "#/definitions/mbpbEnumMonth",
           "title": "月份"
         },
-        "Day": {
+        "day": {
           "type": "array",
           "items": {
             "type": "integer",
@@ -811,12 +1013,12 @@
     "mbpbWithQuarter": {
       "type": "object",
       "properties": {
-        "Month": {
+        "month": {
           "type": "integer",
           "format": "int32",
           "title": "第N个月"
         },
-        "Day": {
+        "day": {
           "type": "array",
           "items": {
             "type": "integer",
@@ -830,23 +1032,11 @@
     "mbpbWorkflowReply": {
       "type": "object",
       "properties": {
-        "EnableReply": {
+        "enableReply": {
           "$ref": "#/definitions/mbpbEnableReply"
         },
-        "FlowReply": {
+        "flowReply": {
           "$ref": "#/definitions/mbpbReply"
-        }
-      }
-    },
-    "mbpbflowMap": {
-      "type": "object",
-      "properties": {
-        "UUID": {
-          "type": "string"
-        },
-        "flowID": {
-          "type": "string",
-          "format": "int64"
         }
       }
     },
@@ -858,25 +1048,6 @@
         }
       },
       "additionalProperties": {}
-    },
-    "rpcStatus": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
-          "type": "string"
-        },
-        "details": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/protobufAny"
-          }
-        }
-      }
     }
   }
 }

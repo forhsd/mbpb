@@ -19,15 +19,40 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MBetl_Enable_FullMethodName            = "/mbpb.MBetl/Enable"
-	MBetl_Disable_FullMethodName           = "/mbpb.MBetl/Disable"
-	MBetl_Run_FullMethodName               = "/mbpb.MBetl/Run"
-	MBetl_Cancel_FullMethodName            = "/mbpb.MBetl/Cancel"
-	MBetl_Remove_FullMethodName            = "/mbpb.MBetl/Remove"
-	MBetl_DataLineage_FullMethodName       = "/mbpb.MBetl/DataLineage"
-	MBetl_TaskflowEnable_FullMethodName    = "/mbpb.MBetl/TaskflowEnable"
-	MBetl_GetTaskflowSpec_FullMethodName   = "/mbpb.MBetl/GetTaskflowSpec"
-	MBetl_GetTaskflowStatus_FullMethodName = "/mbpb.MBetl/GetTaskflowStatus"
+	MBetl_Enable_FullMethodName                      = "/mbpb.MBetl/Enable"
+	MBetl_Disable_FullMethodName                     = "/mbpb.MBetl/Disable"
+	MBetl_Run_FullMethodName                         = "/mbpb.MBetl/Run"
+	MBetl_Cancel_FullMethodName                      = "/mbpb.MBetl/Cancel"
+	MBetl_Remove_FullMethodName                      = "/mbpb.MBetl/Remove"
+	MBetl_DataLineage_FullMethodName                 = "/mbpb.MBetl/DataLineage"
+	MBetl_WorkflowDraft_FullMethodName               = "/mbpb.MBetl/WorkflowDraft"
+	MBetl_WorkflowEnable_FullMethodName              = "/mbpb.MBetl/WorkflowEnable"
+	MBetl_WorkflowDisable_FullMethodName             = "/mbpb.MBetl/WorkflowDisable"
+	MBetl_WorkflowRun_FullMethodName                 = "/mbpb.MBetl/WorkflowRun"
+	MBetl_WorkflowCancel_FullMethodName              = "/mbpb.MBetl/WorkflowCancel"
+	MBetl_WorkflowRemove_FullMethodName              = "/mbpb.MBetl/WorkflowRemove"
+	MBetl_WorkflowSpec_FullMethodName                = "/mbpb.MBetl/WorkflowSpec"
+	MBetl_WorkflowStatus_FullMethodName              = "/mbpb.MBetl/WorkflowStatus"
+	MBetl_WorkflowStatusStream_FullMethodName        = "/mbpb.MBetl/WorkflowStatusStream"
+	MBetl_ScheduledWebHook_FullMethodName            = "/mbpb.MBetl/ScheduledWebHook"
+	MBetl_ScheduledWebHookBatchRemove_FullMethodName = "/mbpb.MBetl/ScheduledWebHookBatchRemove"
+	MBetl_ScheduledWebHookBatchOp_FullMethodName     = "/mbpb.MBetl/ScheduledWebHookBatchOp"
+	MBetl_DatabaseUPsert_FullMethodName              = "/mbpb.MBetl/DatabaseUPsert"
+	MBetl_DatabaseRemove_FullMethodName              = "/mbpb.MBetl/DatabaseRemove"
+	MBetl_DatabaseQuery_FullMethodName               = "/mbpb.MBetl/DatabaseQuery"
+	MBetl_ModelUPsert_FullMethodName                 = "/mbpb.MBetl/ModelUPsert"
+	MBetl_ModelRemove_FullMethodName                 = "/mbpb.MBetl/ModelRemove"
+	MBetl_ModelQuery_FullMethodName                  = "/mbpb.MBetl/ModelQuery"
+	MBetl_ModelExec_FullMethodName                   = "/mbpb.MBetl/ModelExec"
+	MBetl_IncrSyncUPsert_FullMethodName              = "/mbpb.MBetl/IncrSyncUPsert"
+	MBetl_IncrSyncRemove_FullMethodName              = "/mbpb.MBetl/IncrSyncRemove"
+	MBetl_IncrSyncQuery_FullMethodName               = "/mbpb.MBetl/IncrSyncQuery"
+	MBetl_IncrSyncEnable_FullMethodName              = "/mbpb.MBetl/IncrSyncEnable"
+	MBetl_IncrSyncDisable_FullMethodName             = "/mbpb.MBetl/IncrSyncDisable"
+	MBetl_IncrSyncRun_FullMethodName                 = "/mbpb.MBetl/IncrSyncRun"
+	MBetl_IncrSyncCancel_FullMethodName              = "/mbpb.MBetl/IncrSyncCancel"
+	MBetl_ResetInitialSync_FullMethodName            = "/mbpb.MBetl/ResetInitialSync"
+	MBetl_ClearResultTable_FullMethodName            = "/mbpb.MBetl/ClearResultTable"
 )
 
 // MBetlClient is the client API for MBetl service.
@@ -46,12 +71,62 @@ type MBetlClient interface {
 	Remove(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Error, error)
 	// 数据血亲
 	DataLineage(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Graph, error)
-	// 任务流启用
-	TaskflowEnable(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error)
+	// 工作流草稿
+	WorkflowDraft(ctx context.Context, in *FlowEnableRequest, opts ...grpc.CallOption) (*FlowEnableReply, error)
+	// 工作流启用
+	WorkflowEnable(ctx context.Context, in *FlowEnableRequest, opts ...grpc.CallOption) (*FlowEnableReply, error)
+	// 工作流禁用
+	WorkflowDisable(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*Error, error)
+	// 工作流运行
+	WorkflowRun(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*RunReply, error)
+	// 工作流取消
+	WorkflowCancel(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowCancelReply, error)
+	// 工作流删除
+	WorkflowRemove(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowRemoveReply, error)
 	// 查询工作流定义
-	GetTaskflowSpec(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*Graph, error)
+	WorkflowSpec(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowReply, error)
 	// 查询工作流状态
-	GetTaskflowStatus(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Graph], error)
+	WorkflowStatus(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowReply, error)
+	// 流式查询工作流状态
+	WorkflowStatusStream(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FlowReply], error)
+	// 定时钩子
+	ScheduledWebHook(ctx context.Context, in *WebHookRequest, opts ...grpc.CallOption) (*WebHookReply, error)
+	// 批量删除定时钩子
+	ScheduledWebHookBatchRemove(ctx context.Context, in *BatchRequest, opts ...grpc.CallOption) (*GenericReply, error)
+	// 定时钩子批量操作
+	ScheduledWebHookBatchOp(ctx context.Context, in *BatchOpRequest, opts ...grpc.CallOption) (*BatchOpResponse, error)
+	// 添加、修改数据库
+	DatabaseUPsert(ctx context.Context, in *DatabaseRequest, opts ...grpc.CallOption) (*DatabaseReply, error)
+	// 删除数据库 请求ID必须大于0
+	DatabaseRemove(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 数据库列表
+	DatabaseQuery(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*DatabaseReply, error)
+	// 建表语句 添加、修改
+	ModelUPsert(ctx context.Context, in *ModelRequest, opts ...grpc.CallOption) (*ModelReply, error)
+	// 删除建表语句
+	ModelRemove(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 建表语句查询
+	ModelQuery(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*ModelReply, error)
+	// 建表语句立即执行
+	ModelExec(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 增量同步 新增、修改 IncrementalUpdate
+	IncrSyncUPsert(ctx context.Context, in *IncrRequest, opts ...grpc.CallOption) (*GenericReply, error)
+	// 增量同步删除
+	IncrSyncRemove(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 增量同步查询
+	IncrSyncQuery(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*IncrReply, error)
+	// 增量同步启用
+	IncrSyncEnable(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 增量同步禁用
+	IncrSyncDisable(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 增量同步运行
+	IncrSyncRun(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 增量同步取消运行
+	IncrSyncCancel(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 从头开始运行 重置任务从存量开始重新运行
+	ResetInitialSync(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
+	// 清空结果表
+	ClearResultTable(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error)
 }
 
 type mBetlClient struct {
@@ -122,33 +197,93 @@ func (c *mBetlClient) DataLineage(ctx context.Context, in *Request, opts ...grpc
 	return out, nil
 }
 
-func (c *mBetlClient) TaskflowEnable(ctx context.Context, in *TaskflowRequest, opts ...grpc.CallOption) (*Error, error) {
+func (c *mBetlClient) WorkflowDraft(ctx context.Context, in *FlowEnableRequest, opts ...grpc.CallOption) (*FlowEnableReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FlowEnableReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowDraft_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) WorkflowEnable(ctx context.Context, in *FlowEnableRequest, opts ...grpc.CallOption) (*FlowEnableReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FlowEnableReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowEnable_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) WorkflowDisable(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*Error, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Error)
-	err := c.cc.Invoke(ctx, MBetl_TaskflowEnable_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowDisable_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *mBetlClient) GetTaskflowSpec(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*Graph, error) {
+func (c *mBetlClient) WorkflowRun(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*RunReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(Graph)
-	err := c.cc.Invoke(ctx, MBetl_GetTaskflowSpec_FullMethodName, in, out, cOpts...)
+	out := new(RunReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowRun_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *mBetlClient) GetTaskflowStatus(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Graph], error) {
+func (c *mBetlClient) WorkflowCancel(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowCancelReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &MBetl_ServiceDesc.Streams[0], MBetl_GetTaskflowStatus_FullMethodName, cOpts...)
+	out := new(FlowCancelReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowCancel_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[FlowRequest, Graph]{ClientStream: stream}
+	return out, nil
+}
+
+func (c *mBetlClient) WorkflowRemove(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowRemoveReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FlowRemoveReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowRemove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) WorkflowSpec(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FlowReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowSpec_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) WorkflowStatus(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (*FlowReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FlowReply)
+	err := c.cc.Invoke(ctx, MBetl_WorkflowStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) WorkflowStatusStream(ctx context.Context, in *FlowRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FlowReply], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &MBetl_ServiceDesc.Streams[0], MBetl_WorkflowStatusStream_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[FlowRequest, FlowReply]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -159,7 +294,197 @@ func (c *mBetlClient) GetTaskflowStatus(ctx context.Context, in *FlowRequest, op
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MBetl_GetTaskflowStatusClient = grpc.ServerStreamingClient[Graph]
+type MBetl_WorkflowStatusStreamClient = grpc.ServerStreamingClient[FlowReply]
+
+func (c *mBetlClient) ScheduledWebHook(ctx context.Context, in *WebHookRequest, opts ...grpc.CallOption) (*WebHookReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(WebHookReply)
+	err := c.cc.Invoke(ctx, MBetl_ScheduledWebHook_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ScheduledWebHookBatchRemove(ctx context.Context, in *BatchRequest, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_ScheduledWebHookBatchRemove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ScheduledWebHookBatchOp(ctx context.Context, in *BatchOpRequest, opts ...grpc.CallOption) (*BatchOpResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BatchOpResponse)
+	err := c.cc.Invoke(ctx, MBetl_ScheduledWebHookBatchOp_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) DatabaseUPsert(ctx context.Context, in *DatabaseRequest, opts ...grpc.CallOption) (*DatabaseReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DatabaseReply)
+	err := c.cc.Invoke(ctx, MBetl_DatabaseUPsert_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) DatabaseRemove(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_DatabaseRemove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) DatabaseQuery(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*DatabaseReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DatabaseReply)
+	err := c.cc.Invoke(ctx, MBetl_DatabaseQuery_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ModelUPsert(ctx context.Context, in *ModelRequest, opts ...grpc.CallOption) (*ModelReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ModelReply)
+	err := c.cc.Invoke(ctx, MBetl_ModelUPsert_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ModelRemove(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_ModelRemove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ModelQuery(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*ModelReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ModelReply)
+	err := c.cc.Invoke(ctx, MBetl_ModelQuery_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ModelExec(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_ModelExec_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncUPsert(ctx context.Context, in *IncrRequest, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncUPsert_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncRemove(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncRemove_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncQuery(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*IncrReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IncrReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncQuery_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncEnable(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncEnable_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncDisable(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncDisable_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncRun(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncRun_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) IncrSyncCancel(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_IncrSyncCancel_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ResetInitialSync(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_ResetInitialSync_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mBetlClient) ClearResultTable(ctx context.Context, in *PrimaryKey, opts ...grpc.CallOption) (*GenericReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GenericReply)
+	err := c.cc.Invoke(ctx, MBetl_ClearResultTable_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
 
 // MBetlServer is the server API for MBetl service.
 // All implementations must embed UnimplementedMBetlServer
@@ -177,12 +502,62 @@ type MBetlServer interface {
 	Remove(context.Context, *Request) (*Error, error)
 	// 数据血亲
 	DataLineage(context.Context, *Request) (*Graph, error)
-	// 任务流启用
-	TaskflowEnable(context.Context, *TaskflowRequest) (*Error, error)
+	// 工作流草稿
+	WorkflowDraft(context.Context, *FlowEnableRequest) (*FlowEnableReply, error)
+	// 工作流启用
+	WorkflowEnable(context.Context, *FlowEnableRequest) (*FlowEnableReply, error)
+	// 工作流禁用
+	WorkflowDisable(context.Context, *FlowRequest) (*Error, error)
+	// 工作流运行
+	WorkflowRun(context.Context, *FlowRequest) (*RunReply, error)
+	// 工作流取消
+	WorkflowCancel(context.Context, *FlowRequest) (*FlowCancelReply, error)
+	// 工作流删除
+	WorkflowRemove(context.Context, *FlowRequest) (*FlowRemoveReply, error)
 	// 查询工作流定义
-	GetTaskflowSpec(context.Context, *FlowRequest) (*Graph, error)
+	WorkflowSpec(context.Context, *FlowRequest) (*FlowReply, error)
 	// 查询工作流状态
-	GetTaskflowStatus(*FlowRequest, grpc.ServerStreamingServer[Graph]) error
+	WorkflowStatus(context.Context, *FlowRequest) (*FlowReply, error)
+	// 流式查询工作流状态
+	WorkflowStatusStream(*FlowRequest, grpc.ServerStreamingServer[FlowReply]) error
+	// 定时钩子
+	ScheduledWebHook(context.Context, *WebHookRequest) (*WebHookReply, error)
+	// 批量删除定时钩子
+	ScheduledWebHookBatchRemove(context.Context, *BatchRequest) (*GenericReply, error)
+	// 定时钩子批量操作
+	ScheduledWebHookBatchOp(context.Context, *BatchOpRequest) (*BatchOpResponse, error)
+	// 添加、修改数据库
+	DatabaseUPsert(context.Context, *DatabaseRequest) (*DatabaseReply, error)
+	// 删除数据库 请求ID必须大于0
+	DatabaseRemove(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 数据库列表
+	DatabaseQuery(context.Context, *PrimaryKey) (*DatabaseReply, error)
+	// 建表语句 添加、修改
+	ModelUPsert(context.Context, *ModelRequest) (*ModelReply, error)
+	// 删除建表语句
+	ModelRemove(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 建表语句查询
+	ModelQuery(context.Context, *PrimaryKey) (*ModelReply, error)
+	// 建表语句立即执行
+	ModelExec(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 增量同步 新增、修改 IncrementalUpdate
+	IncrSyncUPsert(context.Context, *IncrRequest) (*GenericReply, error)
+	// 增量同步删除
+	IncrSyncRemove(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 增量同步查询
+	IncrSyncQuery(context.Context, *PrimaryKey) (*IncrReply, error)
+	// 增量同步启用
+	IncrSyncEnable(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 增量同步禁用
+	IncrSyncDisable(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 增量同步运行
+	IncrSyncRun(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 增量同步取消运行
+	IncrSyncCancel(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 从头开始运行 重置任务从存量开始重新运行
+	ResetInitialSync(context.Context, *PrimaryKey) (*GenericReply, error)
+	// 清空结果表
+	ClearResultTable(context.Context, *PrimaryKey) (*GenericReply, error)
 	mustEmbedUnimplementedMBetlServer()
 }
 
@@ -211,14 +586,89 @@ func (UnimplementedMBetlServer) Remove(context.Context, *Request) (*Error, error
 func (UnimplementedMBetlServer) DataLineage(context.Context, *Request) (*Graph, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DataLineage not implemented")
 }
-func (UnimplementedMBetlServer) TaskflowEnable(context.Context, *TaskflowRequest) (*Error, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TaskflowEnable not implemented")
+func (UnimplementedMBetlServer) WorkflowDraft(context.Context, *FlowEnableRequest) (*FlowEnableReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowDraft not implemented")
 }
-func (UnimplementedMBetlServer) GetTaskflowSpec(context.Context, *FlowRequest) (*Graph, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTaskflowSpec not implemented")
+func (UnimplementedMBetlServer) WorkflowEnable(context.Context, *FlowEnableRequest) (*FlowEnableReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowEnable not implemented")
 }
-func (UnimplementedMBetlServer) GetTaskflowStatus(*FlowRequest, grpc.ServerStreamingServer[Graph]) error {
-	return status.Errorf(codes.Unimplemented, "method GetTaskflowStatus not implemented")
+func (UnimplementedMBetlServer) WorkflowDisable(context.Context, *FlowRequest) (*Error, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowDisable not implemented")
+}
+func (UnimplementedMBetlServer) WorkflowRun(context.Context, *FlowRequest) (*RunReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowRun not implemented")
+}
+func (UnimplementedMBetlServer) WorkflowCancel(context.Context, *FlowRequest) (*FlowCancelReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowCancel not implemented")
+}
+func (UnimplementedMBetlServer) WorkflowRemove(context.Context, *FlowRequest) (*FlowRemoveReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowRemove not implemented")
+}
+func (UnimplementedMBetlServer) WorkflowSpec(context.Context, *FlowRequest) (*FlowReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowSpec not implemented")
+}
+func (UnimplementedMBetlServer) WorkflowStatus(context.Context, *FlowRequest) (*FlowReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WorkflowStatus not implemented")
+}
+func (UnimplementedMBetlServer) WorkflowStatusStream(*FlowRequest, grpc.ServerStreamingServer[FlowReply]) error {
+	return status.Errorf(codes.Unimplemented, "method WorkflowStatusStream not implemented")
+}
+func (UnimplementedMBetlServer) ScheduledWebHook(context.Context, *WebHookRequest) (*WebHookReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScheduledWebHook not implemented")
+}
+func (UnimplementedMBetlServer) ScheduledWebHookBatchRemove(context.Context, *BatchRequest) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScheduledWebHookBatchRemove not implemented")
+}
+func (UnimplementedMBetlServer) ScheduledWebHookBatchOp(context.Context, *BatchOpRequest) (*BatchOpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScheduledWebHookBatchOp not implemented")
+}
+func (UnimplementedMBetlServer) DatabaseUPsert(context.Context, *DatabaseRequest) (*DatabaseReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DatabaseUPsert not implemented")
+}
+func (UnimplementedMBetlServer) DatabaseRemove(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DatabaseRemove not implemented")
+}
+func (UnimplementedMBetlServer) DatabaseQuery(context.Context, *PrimaryKey) (*DatabaseReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DatabaseQuery not implemented")
+}
+func (UnimplementedMBetlServer) ModelUPsert(context.Context, *ModelRequest) (*ModelReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModelUPsert not implemented")
+}
+func (UnimplementedMBetlServer) ModelRemove(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModelRemove not implemented")
+}
+func (UnimplementedMBetlServer) ModelQuery(context.Context, *PrimaryKey) (*ModelReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModelQuery not implemented")
+}
+func (UnimplementedMBetlServer) ModelExec(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ModelExec not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncUPsert(context.Context, *IncrRequest) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncUPsert not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncRemove(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncRemove not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncQuery(context.Context, *PrimaryKey) (*IncrReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncQuery not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncEnable(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncEnable not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncDisable(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncDisable not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncRun(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncRun not implemented")
+}
+func (UnimplementedMBetlServer) IncrSyncCancel(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IncrSyncCancel not implemented")
+}
+func (UnimplementedMBetlServer) ResetInitialSync(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetInitialSync not implemented")
+}
+func (UnimplementedMBetlServer) ClearResultTable(context.Context, *PrimaryKey) (*GenericReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ClearResultTable not implemented")
 }
 func (UnimplementedMBetlServer) mustEmbedUnimplementedMBetlServer() {}
 func (UnimplementedMBetlServer) testEmbeddedByValue()               {}
@@ -349,52 +799,502 @@ func _MBetl_DataLineage_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MBetl_TaskflowEnable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TaskflowRequest)
+func _MBetl_WorkflowDraft_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowEnableRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MBetlServer).TaskflowEnable(ctx, in)
+		return srv.(MBetlServer).WorkflowDraft(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MBetl_TaskflowEnable_FullMethodName,
+		FullMethod: MBetl_WorkflowDraft_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MBetlServer).TaskflowEnable(ctx, req.(*TaskflowRequest))
+		return srv.(MBetlServer).WorkflowDraft(ctx, req.(*FlowEnableRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MBetl_GetTaskflowSpec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _MBetl_WorkflowEnable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowEnableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).WorkflowEnable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_WorkflowEnable_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).WorkflowEnable(ctx, req.(*FlowEnableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_WorkflowDisable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(FlowRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MBetlServer).GetTaskflowSpec(ctx, in)
+		return srv.(MBetlServer).WorkflowDisable(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: MBetl_GetTaskflowSpec_FullMethodName,
+		FullMethod: MBetl_WorkflowDisable_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MBetlServer).GetTaskflowSpec(ctx, req.(*FlowRequest))
+		return srv.(MBetlServer).WorkflowDisable(ctx, req.(*FlowRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MBetl_GetTaskflowStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _MBetl_WorkflowRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).WorkflowRun(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_WorkflowRun_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).WorkflowRun(ctx, req.(*FlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_WorkflowCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).WorkflowCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_WorkflowCancel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).WorkflowCancel(ctx, req.(*FlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_WorkflowRemove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).WorkflowRemove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_WorkflowRemove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).WorkflowRemove(ctx, req.(*FlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_WorkflowSpec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).WorkflowSpec(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_WorkflowSpec_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).WorkflowSpec(ctx, req.(*FlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_WorkflowStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).WorkflowStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_WorkflowStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).WorkflowStatus(ctx, req.(*FlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_WorkflowStatusStream_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(FlowRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(MBetlServer).GetTaskflowStatus(m, &grpc.GenericServerStream[FlowRequest, Graph]{ServerStream: stream})
+	return srv.(MBetlServer).WorkflowStatusStream(m, &grpc.GenericServerStream[FlowRequest, FlowReply]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type MBetl_GetTaskflowStatusServer = grpc.ServerStreamingServer[Graph]
+type MBetl_WorkflowStatusStreamServer = grpc.ServerStreamingServer[FlowReply]
+
+func _MBetl_ScheduledWebHook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WebHookRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ScheduledWebHook(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ScheduledWebHook_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ScheduledWebHook(ctx, req.(*WebHookRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ScheduledWebHookBatchRemove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ScheduledWebHookBatchRemove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ScheduledWebHookBatchRemove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ScheduledWebHookBatchRemove(ctx, req.(*BatchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ScheduledWebHookBatchOp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BatchOpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ScheduledWebHookBatchOp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ScheduledWebHookBatchOp_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ScheduledWebHookBatchOp(ctx, req.(*BatchOpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_DatabaseUPsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DatabaseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).DatabaseUPsert(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_DatabaseUPsert_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).DatabaseUPsert(ctx, req.(*DatabaseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_DatabaseRemove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).DatabaseRemove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_DatabaseRemove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).DatabaseRemove(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_DatabaseQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).DatabaseQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_DatabaseQuery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).DatabaseQuery(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ModelUPsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ModelRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ModelUPsert(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ModelUPsert_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ModelUPsert(ctx, req.(*ModelRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ModelRemove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ModelRemove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ModelRemove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ModelRemove(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ModelQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ModelQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ModelQuery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ModelQuery(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ModelExec_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ModelExec(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ModelExec_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ModelExec(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncUPsert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IncrRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncUPsert(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncUPsert_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncUPsert(ctx, req.(*IncrRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncRemove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncRemove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncRemove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncRemove(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncQuery_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncQuery(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncQuery_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncQuery(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncEnable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncEnable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncEnable_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncEnable(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncDisable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncDisable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncDisable_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncDisable(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncRun(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncRun_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncRun(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_IncrSyncCancel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).IncrSyncCancel(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_IncrSyncCancel_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).IncrSyncCancel(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ResetInitialSync_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ResetInitialSync(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ResetInitialSync_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ResetInitialSync(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MBetl_ClearResultTable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrimaryKey)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MBetlServer).ClearResultTable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MBetl_ClearResultTable_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MBetlServer).ClearResultTable(ctx, req.(*PrimaryKey))
+	}
+	return interceptor(ctx, in, info, handler)
+}
 
 // MBetl_ServiceDesc is the grpc.ServiceDesc for MBetl service.
 // It's only intended for direct use with grpc.RegisterService,
@@ -428,18 +1328,118 @@ var MBetl_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _MBetl_DataLineage_Handler,
 		},
 		{
-			MethodName: "TaskflowEnable",
-			Handler:    _MBetl_TaskflowEnable_Handler,
+			MethodName: "WorkflowDraft",
+			Handler:    _MBetl_WorkflowDraft_Handler,
 		},
 		{
-			MethodName: "GetTaskflowSpec",
-			Handler:    _MBetl_GetTaskflowSpec_Handler,
+			MethodName: "WorkflowEnable",
+			Handler:    _MBetl_WorkflowEnable_Handler,
+		},
+		{
+			MethodName: "WorkflowDisable",
+			Handler:    _MBetl_WorkflowDisable_Handler,
+		},
+		{
+			MethodName: "WorkflowRun",
+			Handler:    _MBetl_WorkflowRun_Handler,
+		},
+		{
+			MethodName: "WorkflowCancel",
+			Handler:    _MBetl_WorkflowCancel_Handler,
+		},
+		{
+			MethodName: "WorkflowRemove",
+			Handler:    _MBetl_WorkflowRemove_Handler,
+		},
+		{
+			MethodName: "WorkflowSpec",
+			Handler:    _MBetl_WorkflowSpec_Handler,
+		},
+		{
+			MethodName: "WorkflowStatus",
+			Handler:    _MBetl_WorkflowStatus_Handler,
+		},
+		{
+			MethodName: "ScheduledWebHook",
+			Handler:    _MBetl_ScheduledWebHook_Handler,
+		},
+		{
+			MethodName: "ScheduledWebHookBatchRemove",
+			Handler:    _MBetl_ScheduledWebHookBatchRemove_Handler,
+		},
+		{
+			MethodName: "ScheduledWebHookBatchOp",
+			Handler:    _MBetl_ScheduledWebHookBatchOp_Handler,
+		},
+		{
+			MethodName: "DatabaseUPsert",
+			Handler:    _MBetl_DatabaseUPsert_Handler,
+		},
+		{
+			MethodName: "DatabaseRemove",
+			Handler:    _MBetl_DatabaseRemove_Handler,
+		},
+		{
+			MethodName: "DatabaseQuery",
+			Handler:    _MBetl_DatabaseQuery_Handler,
+		},
+		{
+			MethodName: "ModelUPsert",
+			Handler:    _MBetl_ModelUPsert_Handler,
+		},
+		{
+			MethodName: "ModelRemove",
+			Handler:    _MBetl_ModelRemove_Handler,
+		},
+		{
+			MethodName: "ModelQuery",
+			Handler:    _MBetl_ModelQuery_Handler,
+		},
+		{
+			MethodName: "ModelExec",
+			Handler:    _MBetl_ModelExec_Handler,
+		},
+		{
+			MethodName: "IncrSyncUPsert",
+			Handler:    _MBetl_IncrSyncUPsert_Handler,
+		},
+		{
+			MethodName: "IncrSyncRemove",
+			Handler:    _MBetl_IncrSyncRemove_Handler,
+		},
+		{
+			MethodName: "IncrSyncQuery",
+			Handler:    _MBetl_IncrSyncQuery_Handler,
+		},
+		{
+			MethodName: "IncrSyncEnable",
+			Handler:    _MBetl_IncrSyncEnable_Handler,
+		},
+		{
+			MethodName: "IncrSyncDisable",
+			Handler:    _MBetl_IncrSyncDisable_Handler,
+		},
+		{
+			MethodName: "IncrSyncRun",
+			Handler:    _MBetl_IncrSyncRun_Handler,
+		},
+		{
+			MethodName: "IncrSyncCancel",
+			Handler:    _MBetl_IncrSyncCancel_Handler,
+		},
+		{
+			MethodName: "ResetInitialSync",
+			Handler:    _MBetl_ResetInitialSync_Handler,
+		},
+		{
+			MethodName: "ClearResultTable",
+			Handler:    _MBetl_ClearResultTable_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "GetTaskflowStatus",
-			Handler:       _MBetl_GetTaskflowStatus_Handler,
+			StreamName:    "WorkflowStatusStream",
+			Handler:       _MBetl_WorkflowStatusStream_Handler,
 			ServerStreams: true,
 		},
 	},
