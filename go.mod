@@ -1,4 +1,4 @@
-module github.com/forhsd/mbpb/golang
+module github.com/forhsd/mbpb
 
 go 1.24.5
 
